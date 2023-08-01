@@ -1,31 +1,23 @@
-//오류가 2개가 있는데 머지? 아 패키지 다운로드 확인
 <!DOCTYPE html>
 <html>
 <head>
-  <title>메뉴 이동 및 선택</title>
+  <title>메뉴 이동 및 선택 예제</title>
   <style>
     .active {
       background-color: yellow;
     }
-	#button {
-            width: 120px;
-            height: 40px;
-            text-align: center;
-            line-height: 40px;https://search1.kakaocdn.net/argon/656x0_80_wr/CSCf06x1YhR
-            font-size: 18px;
-        }
   </style>
 </head>
 <body>
   <ul id="menu">
-    <div id="button" data-message="메뉴 1을 선택하셨습니다.">메뉴 1</div>
-    <div id="button" data-message="메뉴 2를 선택하셨습니다.">메뉴 2</div>
-    <div id="button" data-message="메뉴 3을 선택하셨습니다.">메뉴 3</div>
-    <div id="button" data-message="메뉴 4를 선택하셨습니다.">메뉴 4</div>
+    <li data-message="메뉴 1을 선택하셨습니다.">메뉴 1</li>
+    <li data-message="메뉴 2를 선택하셨습니다.">메뉴 2</li>
+    <li data-message="메뉴 3을 선택하셨습니다.">메뉴 3</li>
+    <li data-message="메뉴 4를 선택하셨습니다.">메뉴 4</li>
   </ul>
 
   <script>
-    var menuItems = document.querySelectorAll("#menu div");
+    var menuItems = document.querySelectorAll("#menu li");
     var activeIndex = 0;
 
     // 키보드 방향키 이벤트 리스너 등록
@@ -48,6 +40,18 @@
         menuItems[activeIndex].classList.add("active");
       }
     });
+
+    // 마우스 오버 이벤트 리스너 등록
+    for (let i = 0; i < menuItems.length; i++) {
+      menuItems[i].addEventListener("mouseover", function() {
+        activeIndex = i;
+        menuItems[activeIndex].classList.add("active");
+      });
+
+      menuItems[i].addEventListener("mouseout", function() {
+        menuItems[activeIndex].classList.remove("active");
+      });
+    }
   </script>
 </body>
 </html>
