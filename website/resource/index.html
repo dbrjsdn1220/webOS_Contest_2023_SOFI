@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <title>HOME</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <header> <!--상단에 로고랑 음량설정 부분-->
+    <img src="icons/sofi.png" id="logo">
+    <div class="volumeBox" id="volume1" onclick="volumeControl(1)"></div>
+    <div class="volumeBox" id="volume2" onclick="volumeControl(2)"></div>
+    <div class="volumeBox" id="volume3" onclick="volumeControl(3)"></div>
+    <div class="volumeBox" id="volume4" onclick="volumeControl(4)"></div>
+    <div class="volumeBox" id="volume5" onclick="volumeControl(5)"></div>
+    <div class="volumeBox" id="volume6" onclick="volumeControl(6)"></div>
+    <div class="volumeBox" id="volume7" onclick="volumeControl(7)"></div>
+    <div class="volumeBox" id="volume8" onclick="volumeControl(8)"></div>
+    <div class="volumeBox" id="volume9" onclick="volumeControl(9)"></div>
+    <div class="volumeBox" id="volume10" onclick="volumeControl(10)"></div>
+    <img id="volumeImage" src="icons\nonMute.png" onclick="mute()">
+  </header>
+
+  <section id="menuBar"> <!--좌측에 메뉴선택하는 부분-->
+    <nav>
+      <li class="menuType">HOME</li>
+      <li class="menuLink" id="menu1" onclick="iframeSelect(1)">대시보드</li>
+      <li class="menuType">SETTING</li>
+      <li class="menuLink" id="menu2" onclick="iframeSelect(2)">사용자</li>
+      <li class="menuLink" id="menu3" onclick="iframeSelect(3)">알레르기</li>
+      <li class="menuType">INFORMATION</li>
+      <li class="menuLink" id="menu4" onclick="iframeSelect(4)">요리법</li>
+    </nav>
+  </section>
+  <iframe id="iframe"></iframe>
+
+  <script src="script.js"></script>
+</body>
+</html>
