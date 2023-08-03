@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <title>HOME</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <header> <!--상단에 로고랑 음량설정 부분-->
+    <img src="icons/sofi.png" id="logo">
+    <div class="volumeBox" id="volume1" onclick="volumeControl(1)"></div>
+    <div class="volumeBox" id="volume2" onclick="volumeControl(2)"></div>
+    <div class="volumeBox" id="volume3" onclick="volumeControl(3)"></div>
+    <div class="volumeBox" id="volume4" onclick="volumeControl(4)"></div>
+    <div class="volumeBox" id="volume5" onclick="volumeControl(5)"></div>
+    <div class="volumeBox" id="volume6" onclick="volumeControl(6)"></div>
+    <div class="volumeBox" id="volume7" onclick="volumeControl(7)"></div>
+    <div class="volumeBox" id="volume8" onclick="volumeControl(8)"></div>
+    <div class="volumeBox" id="volume9" onclick="volumeControl(9)"></div>
+    <div class="volumeBox" id="volume10" onclick="volumeControl(10)"></div>
+    <img id="volumeImage" src="icons\nonMute.png" onclick="mute()">
+  </header>
+
+  <section id="menuBar"> <!--좌측에 메뉴선택하는 부분-->
+    <nav>
+      <li>HOME</li>
+      <li>SETTING</li>
+      <li>USER</li>
+      <li>ALLERGIE</li>
+      <li>INFORMATION</li>
+      <li>HOW TO COOK</li>
+    </nav>
+  </section>
+
+  <section> <!--iframe 태그 부분-->
+    <iframe src="main_test.html" title="Main"></iframe>
+  </section>
+
+  <script>
+    var muteCheck = 0; //음소거 상태인지 확인하는 변수
+    var volumeImage = document.getElementById("volumeImage"); 
+    
+    function mute() //소리 음소거하는 함수
+    {
+      if(muteCheck == 0){
+        muteCheck = 1;
+        volumeImage.src = "icons/mute.png";
+        /* LS2 API 사용해서 소리 끄는 명령어 넣어야 함 */
+        for(i=10; i>0; i--){
+          var volumeSet = document.getElementById("volume"+i);
+          volumeSet.style="background-color: white";
+        }
+      }
+    }
+    
+    function volumeControl(number) //소리 조절하는 함수
+    {
+      if(muteCheck == 1){
+        muteCheck = 0;
+        volumeImage.src = "icons/nonMute.png";
+      }
+      for(i=10; i>0; i--){
+        var volumeSet = document.getElementById("volume"+i);
+        if(i>=number){
+          volumeSet.style="background-color: cornflowerBlue";
+        }
+        else if(i<number){
+          volumeSet.style="background-color: white";
+        }
+      }
+      /* LS2 API 사용해서 소리 조절하는 명령어 넣어야 함 */
+    }
+
+    window.onload = volumeControl(6); //초기 음량 설정
+  </script>
+</body>
+</html>
