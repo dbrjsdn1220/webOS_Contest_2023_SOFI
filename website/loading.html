@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <title>LOADING...</title>
+  <style>
+    #loading {
+      filter: blur(25px);
+      max-width: 100%;
+      max-height: 100%;
+    }
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 96vh;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <img id="loading" src="sofi.png">
+  </div>
+  <script>
+    window.onload = function() {
+      var loading = document.getElementById("loading");
+      var blurAmount = 25;
+      setInterval(function() {
+        blurAmount -= 0.1;
+        loading.style.filter = "blur(" + blurAmount + "px)";
+      }, 5);
+
+      function redirectToIndex() {
+        window.location.href = "index.html";
+      }
+      setTimeout(redirectToIndex, 3000);
+    };
+  </script>
+</body>
+</html>
