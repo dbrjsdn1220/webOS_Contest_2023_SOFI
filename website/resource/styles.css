@@ -8,7 +8,7 @@
   margin-left: 0.2%;
 }
 /* Set margin for last volume div */
-#volume1 {
+#volume10 {
   margin-right: 1%;
 }
 
@@ -21,37 +21,46 @@
 #logo {
   height: 10vh;
   width: auto;
+  margin: 5px 0px 0px 10px
 }
 
 /* Set menus space */
 #menuBar {
   float: left;
   width: 23%;
-  height: 85vh;
+  height: 97vh;
+  border-right: 2px solid;
 }
 /* explaination part */
 .menuType {
   list-style-type: none;
-  margin-top: 3vh;
+  margin: 4vh 0px 0.5vh 15px; /* top, right, bottom, left */
+  font-weight: bold;
 }
 /* select site part */
 .menuLink {
   list-style-type: none;
-  font-size: 40px;
-  padding-left: 4%;
+  font-size: 30px;
+  padding: 5px 0px;
+  margin: 0px 15px 0px 10px;
+  border-radius: 10px;
 }
 /* put icon on the menu */
 #menu1 {
-  list-style-image: url("icons/menuDashboard.png");
+  padding-left: 50px;
+  background: url("icons/menuDashboard_black.png") 5% 50% no-repeat;
 }
 #menu2 {
-  list-style: url("icons/menuUser.png");
+  padding-left: 50px;
+  background: url("icons/menuUser_black.png") 5% 50% no-repeat;
 }
 #menu3 {
-  list-style-image: url("icons/menuAllergy.png");
+  padding-left: 50px;
+  background: url("icons/menuAllergy_black.png") 5% 50% no-repeat;
 }
 #menu4 {
-  list-style-image: url("icons/menuHowtocook.png");
+  padding-left: 50px;
+  background: url("icons/menuHowtocook_black.png") 5% 50% no-repeat;
 }
 
 /* Set iframe size */
