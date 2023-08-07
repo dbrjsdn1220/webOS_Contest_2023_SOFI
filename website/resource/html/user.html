@@ -7,21 +7,27 @@
 </head>
 
 <body>
-  <form>
-    <label for="data">Enter your data:</label><br>
-    <textarea id="data" name="data" rows="4" cols="50"></textarea><br>
-    <input type="button" value="Save" onclick="saveData()">
-  </form>
+  <input type="text" id="name" placeholder="Name">
+  <input type="text" id="email" placeholder="Email">
+  <button id="saveButton">Save</button>
+    
   <script>
-    function saveData() {
-      const userData = document.getElementById('data').value;
-      if (userData.trim() !== '') {
-        localStorage.setItem('user_', userData);
-        alert('Data saved successfully');
-      } else {
-        alert('Please enter data before saving.');
-      }
-    }
+    const saveButton = document.getElementById('saveButton');
+    saveButton.addEventListener('click', async () => {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+          
+      const response = await fetch('/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, email })
+      });
+            
+      const data = await response.json();
+      alert(data.message);
+    });
   </script>
 </body>
 </html>
