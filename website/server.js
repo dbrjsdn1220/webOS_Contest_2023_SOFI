@@ -9,6 +9,12 @@ app.use(express.json());
 
 let data = []; // 데이터를 저장할 배열
 
+try {
+    data = JSON.parse(fs.readFileSync('data.json'));
+} catch (error) {
+    console.error('기존 데이터를 가져오는 도중 오류 발생:', error);
+}
+
 app.post('/save-data', (req, res) => {
     const inputData = req.body;
   
