@@ -63,6 +63,11 @@
   background: url("icons/menuHowtocook_black.png") 5% 50% no-repeat;
 }
 
+#menu5 {
+  padding-left: 50px;
+  background: url("icons/menuUser_black.png") 5% 50% no-repeat;
+}
+
 /* Set iframe size */
 iframe {
   float: right;
