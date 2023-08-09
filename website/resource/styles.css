@@ -29,7 +29,7 @@
   float: left;
   width: 23%;
   height: 97vh;
-  border-right: 2px solid;
+  border-right: 1px solid;
 }
 /* explaination part */
 .menuType {
@@ -67,7 +67,7 @@
   background: url("icons/menuUser_black.png") 5% 50% no-repeat;
 }
 
-/* Set iframe size */
+/* iframe 속성 사이즈 */
 iframe {
   float: right;
   width: 76%;
@@ -75,4 +75,21 @@ iframe {
   border: none;
 }
 
+/* html 폴더 안의 모든 파일의 body id */
+#frame {
+  border-radius: 20px;
+  border: 1px solid;
+  width: 92%;
+  height: 89vh;
+  overflow: hidden;
+  padding:3%;
+}
 
+/* 제출 버튼 디자인 */
+button {
+  background-color: cornflowerblue;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  padding: 5px 10px;
+}

@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>HOME</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body>
-  <h1>사용자 추가</h1>
+<body id=frame>
+  사용자 추가<br>
   <form id="data-form">
-    <label for="name">이름:</label>
-    <input type="text" id="name" name="name" required><br>
-    <label for="allergy">알레르기 식품:</label>
+    <label for="name">이름: </label>
+    <input type="text" id="name" name="name" required autocomplete="off"><br>
+    <label for="allergy">알레르기 식품: </label>
     <select id="allergy" name="allergy" required>
       <option value="none">없음</option>
       <option value="egg">난류</option>
@@ -34,8 +34,12 @@
       <option value="selfish">조개류(굴, 전복, 홍합 포함)</option>
       <option value="pine nut">잣</option>
     </select>
-    <button type="submit">저장</button>
+    <pre><button type="submit">저장</button></pre>
+    유의사항: 다중 알레르기가 있다면 같은 방식으로 여러 번 진행해주세요.
   </form>
+
+  <h1>데이터 표시 및 수정</h1>
+  <ul id="data-list"></ul>
 
   <script>
     document.getElementById('data-form').addEventListener('submit', function(event) {
@@ -61,6 +65,71 @@
         console.error('오류 발생:', error);
       });
     });
+
+    //여기서부터 공부해야함.
+    function fetchData() {
+    fetch('/get-data')
+      .then(response => response.json())
+      .then(data => {
+        const dataList = document.getElementById('data-list');
+        dataList.innerHTML = ''; // 기존 목록 초기화
+
+        data.forEach(item => {
+          const listItem = document.createElement('li');
+          listItem.innerHTML = `
+            이름: ${item.name}, 알러지: ${item.allergy}
+            <button data-id="${item.id}" class="edit-button">수정</button>
+          `;
+          dataList.appendChild(listItem);
+        });
+
+        // 수정 버튼 클릭 시 해당 아이템을 수정할 수 있는 폼 표시
+        const editButtons = document.querySelectorAll('.edit-button');
+        editButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const id = button.getAttribute('data-id');
+            const item = data.find(item => item.id === id);
+            
+            const editForm = document.createElement('form');
+            editForm.innerHTML = `
+              <input type="text" id="editedName" value="${item.name}" required>
+              <input type="text" id="editedAllergy" value="${item.allergy}" required>
+              <button type="submit">저장</button>
+            `;
+
+            editForm.addEventListener('submit', event => {
+              event.preventDefault();
+
+              const editedName = document.getElementById('editedName').value;
+              const editedAllergy = document.getElementById('editedAllergy').value;
+              
+              fetch('/update-data', {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id, name: editedName, allergy: editedAllergy })
+              })
+              .then(response => response.text())
+              .then(message => {
+                console.log(message);
+                fetchData(); // 수정 후 데이터 다시 불러오기
+              })
+              .catch(error => {
+                console.error('오류 발생:', error);
+              });
+            });
+
+            dataList.replaceChild(editForm, listItem);
+          });
+        });
+      })
+      .catch(error => {
+        console.error('오류 발생:', error);
+      });
+  }
+
+  fetchData(); // 초기 데이터 불러오기
   </script>
 </body>
 </html>
