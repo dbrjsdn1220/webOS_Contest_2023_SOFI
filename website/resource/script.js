@@ -36,7 +36,7 @@ function iframeSelect(selector) // 메뉴 선택 시 웹사이트 이동
 {
   var iframe = document.getElementById("iframe");
   var imageChange = document.getElementById("menu"+selector);
-  var max = 4; // 현재 누를 수 있는 메뉴의 개수
+  var max = 5; // 현재 누를 수 있는 메뉴의 개수
 
   //해당하는 웹페이지로 이동 및 색 변경
   if(selector==1){ // 대시보드
@@ -60,12 +60,12 @@ function iframeSelect(selector) // 메뉴 선택 시 웹사이트 이동
     "background: url('resource/icons/menuHowtocook_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
   else if(selector==5){ //GPIO조작 해보려고 만듬
-    iframe.src = "webos_gpio_test/gpio.html";
+    iframe.src = "../webos_gpio_test/gpio.html";
     imageChange.style = 
     "background: url('resource/icons/menuUser_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
 
-  for(i=1; i<=4; i++){ //선택되지 않은 메뉴 색 초기화
+  for(i=1; i<=max; i++){ //선택되지 않은 메뉴 색 초기화
     var colorChange = document.getElementById("menu"+i);
     if(i!=selector){
       colorChange.style = "background-color: none";
