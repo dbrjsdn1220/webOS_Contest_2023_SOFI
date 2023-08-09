@@ -1,6 +1,10 @@
 [
   {
     "name": "유건우",
-    "age": "23"
+    "allergy": "none"
+  },
+  {
+    "name": "최원헌",
+    "allergy": "none"
   }
 ]
