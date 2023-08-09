@@ -55,12 +55,12 @@ function iframeSelect(selector) // 메뉴 선택 시 웹사이트 이동
     "background: url('resource/icons/menuAllergy_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
   else if(selector==4){ // 요리법
-    iframe.src = "https://www.10000recipe.com/";
+    iframe.src = "https://www.10000recipe.com";
     imageChange.style = 
     "background: url('resource/icons/menuHowtocook_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
   else if(selector==5){ //GPIO조작 해보려고 만듬
-    iframe.src = "../webos_gpio_test/gpio.html";
+    iframe.src = "webos_gpio_test/gpio.html";
     imageChange.style = 
     "background: url('resource/icons/menuUser_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
