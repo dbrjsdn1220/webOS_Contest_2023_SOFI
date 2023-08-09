@@ -20,7 +20,7 @@ app.post('/save-data', (req, res) => {
   
     data.push(inputData);
   
-    fs.writeFile('data.json', JSON.stringify(data, null, 2), (err) => {
+    fs.writeFile('website/data.json', JSON.stringify(data, null, 2), (err) => {
         if (err) {
             console.error('데이터 저장 중 오류 발생:', err);
             res.status(500).send('데이터를 저장하는 중 오류가 발생했습니다.');
