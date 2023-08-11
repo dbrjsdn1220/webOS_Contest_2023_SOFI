@@ -7,57 +7,54 @@
 </head>
 
 <body id=frame>
-  사용자 추가<br>
+  <h1>사용자 추가</h1>
+  유의사항: 다중 알레르기가 있다면 같은 방식으로 여러 번 진행해주세요.<br><br>
   <form id="data-form">
     <label for="name">이름: </label>
     <input type="text" id="name" name="name" required autocomplete="off"><br>
     <label for="allergy">알레르기 식품: </label>
     <select id="allergy" name="allergy" required>
-      <option value="none">없음</option>
-      <option value="egg">난류</option>
-      <option value="milk">우유</option>
-      <option value="buckwheat">메밀</option>
-      <option value="peanut">땅콩</option>
-      <option value="soybean">대두</option>
-      <option value="wheat">밀</option>
-      <option value="mackerel">고등어</option>
-      <option value="crab">게</option>
-      <option value="shrimp">새우</option>
-      <option value="pork">돼지고기</option>
-      <option value="peach">복숭아</option>
-      <option value="tomato">토마토</option>
-      <option value="sulphuric aicd">아황산류</option>
-      <option value="walnut">호두</option>
-      <option value="chicken">닭고기</option>
-      <option value="beef">쇠고기</option>
-      <option value="squid">오징어</option>
-      <option value="selfish">조개류(굴, 전복, 홍합 포함)</option>
-      <option value="pine nut">잣</option>
+      <option value="없음">없음</option>
+      <option value="난류">난류</option>
+      <option value="우유">우유</option>
+      <option value="메밀">메밀</option>
+      <option value="땅콩">땅콩</option>
+      <option value="대두">대두</option>
+      <option value="밀">밀</option>
+      <option value="고등어">고등어</option>
+      <option value="게">게</option>
+      <option value="새우">새우</option>
+      <option value="돼지고기">돼지고기</option>
+      <option value="복숭아">복숭아</option>
+      <option value="토마토">토마토</option>
+      <option value="아황산류">아황산류</option>
+      <option value="호두">호두</option>
+      <option value="닭고기">닭고기</option>
+      <option value="쇠고기">쇠고기</option>
+      <option value="오징어">오징어</option>
+      <option value="조개류">조개류(굴, 전복, 홍합 포함)</option>
+      <option value="잣">잣</option>
     </select>
     <pre><button type="submit">저장</button></pre>
-    유의사항: 다중 알레르기가 있다면 같은 방식으로 여러 번 진행해주세요.
   </form>
 
-  <h1>데이터 표시 및 수정</h1>
-  <ul id="data-list"></ul>
-
+  <h1>사용자 삭제</h1>
+  <ul id="dataList"></ul>
+  
   <script>
     document.getElementById('data-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      
       const name = document.getElementById('name').value;
       const allergy = document.getElementById('allergy').value;
+      const user = { name, allergy };
 
-      const data = { name, allergy };
-
-      fetch('/save-data', {
-        method: 'POST',
+      fetch('/saveUser', {
+        method: 'POST', //post 메서드 (파일생성)
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json' //json 형태의 파일을 다룸.
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(user) // user의 값을 json 형태로 변환.
       })
-      .then(response => response.text())
+      .then(response => response.text()) //텍스트의 형태로
       .then(message => {
         console.log(message);
       })
@@ -66,70 +63,49 @@
       });
     });
 
-    //여기서부터 공부해야함.
+    //데이터를 서버로부터 받아와 화면에 출력
     function fetchData() {
-    fetch('/get-data')
-      .then(response => response.json())
-      .then(data => {
-        const dataList = document.getElementById('data-list');
+      fetch('/getData')
+      .then(response => response.json()) //json의 형태로
+      .then(data => { 
+        const dataList = document.getElementById('dataList');
         dataList.innerHTML = ''; // 기존 목록 초기화
 
-        data.forEach(item => {
+        data.forEach(user => { 
           const listItem = document.createElement('li');
           listItem.innerHTML = `
-            이름: ${item.name}, 알레르기: ${item.allergy}
-            <button data-id="${item.id}" class="edit-button">수정</button>
-          `;
-          dataList.appendChild(listItem);
-        });
-
-        // 수정 버튼 클릭 시 해당 아이템을 수정할 수 있는 폼 표시
-        const editButtons = document.querySelectorAll('.edit-button');
-        editButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            const id = button.getAttribute('data-id');
-            const item = data.find(item => item.id === id);
-            
-            const editForm = document.createElement('form');
-            editForm.innerHTML = `
-              <input type="text" id="editedName" value="${item.name}" required>
-              <input type="text" id="editedAllergy" value="${item.allergy}" required>
-              <button type="submit">저장</button>
-            `;
-
-            editForm.addEventListener('submit', event => {
-              event.preventDefault();
-
-              const editedName = document.getElementById('editedName').value;
-              const editedAllergy = document.getElementById('editedAllergy').value;
-              
-              fetch('/update-data', {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id, name: editedName, allergy: editedAllergy })
-              })
-              .then(response => response.text())
-              .then(message => {
-                console.log(message);
-                fetchData(); // 수정 후 데이터 다시 불러오기
-              })
-              .catch(error => {
-                console.error('오류 발생:', error);
-              });
-            });
-
-            dataList.replaceChild(editForm, listItem);
-          });
+            이름: ${user.name}, 알러지: ${user.allergy}
+            <button data-id="${user.id}" onclick="deleteUser()">삭제</button>`;
+          dataList.appendChild(listItem); //변수 각각의 값을 dataList에 추가
         });
       })
       .catch(error => {
         console.error('오류 발생:', error);
       });
-  }
+    }
 
-  fetchData(); // 초기 데이터 불러오기
+    function deleteUser() {
+      const deleteButtons = document.querySelectorAll('.delete-button');
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const id = button.getAttribute('data-id');
+        
+          fetch(`/delete-data/${id}`, {
+            method: 'DELETE',
+          })
+          .then(response => response.text())
+          .then(message => {
+            console.log(message);
+            fetchData(); // 데이터 삭제 후 데이터 다시 불러오기
+          })
+          .catch(error => {
+            console.error('오류 발생:', error);
+          });
+        });
+      });
+    }
+
+    window.onload = fetchData();
   </script>
 </body>
 </html>
