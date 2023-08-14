@@ -9,7 +9,7 @@
 <body id=frame>
   <h1>사용자 추가</h1>
   유의사항: 다중 알레르기가 있다면 같은 방식으로 여러 번 진행해주세요.<br><br>
-  <form id="data-form">
+  <form id="dataForm">
     <label for="name">이름: </label>
     <input type="text" id="name" name="name" required autocomplete="off"><br>
     <label for="allergy">알레르기 식품: </label>
@@ -42,7 +42,8 @@
   <ul id="dataList"></ul>
   
   <script>
-    document.getElementById('data-form').addEventListener('submit', function(event) {
+    //서버 user.json에 입력한 값을 저장하는 기능
+    document.getElementById('dataForm').addEventListener('submit', function(event) {
       const name = document.getElementById('name').value;
       const allergy = document.getElementById('allergy').value;
       const user = { name, allergy };
@@ -52,7 +53,7 @@
         headers: {
           'Content-Type': 'application/json' //json 형태의 파일을 다룸.
         },
-        body: JSON.stringify(user) // user의 값을 json 형태로 변환.
+        body: JSON.stringify(user)
       })
       .then(response => response.text()) //텍스트의 형태로
       .then(message => {
@@ -66,7 +67,7 @@
     //데이터를 서버로부터 받아와 화면에 출력
     function fetchData() {
       fetch('/getData')
-      .then(response => response.json()) //json의 형태로
+      .then(response => response.json())
       .then(data => { 
         const dataList = document.getElementById('dataList');
         dataList.innerHTML = ''; // 기존 목록 초기화
@@ -75,7 +76,7 @@
           const listItem = document.createElement('li');
           listItem.innerHTML = `
             이름: ${user.name}, 알러지: ${user.allergy}
-            <button data-id="${user.id}" onclick="deleteUser()">삭제</button>`;
+            <button onclick="deleteUser(${user.id})">삭제</button>`;
           dataList.appendChild(listItem); //변수 각각의 값을 dataList에 추가
         });
       })
@@ -84,28 +85,24 @@
       });
     }
 
-    function deleteUser() {
-      const deleteButtons = document.querySelectorAll('.delete-button');
-      deleteButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const id = button.getAttribute('data-id');
-        
-          fetch(`/delete-data/${id}`, {
-            method: 'DELETE',
-          })
-          .then(response => response.text())
-          .then(message => {
-            console.log(message);
-            fetchData(); // 데이터 삭제 후 데이터 다시 불러오기
-          })
-          .catch(error => {
-            console.error('오류 발생:', error);
-          });
-        });
+    function deleteUser(id) {
+      fetch(`/deleteUser`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({id})
+      })
+      .then(response => response.text())
+      .then(message => {
+        console.log(message);
+        fetchData(); // 데이터 삭제 후 데이터 다시 불러오기
+      })
+      .catch(error => {
+        console.error('오류 발생:', error);
       });
     }
-
-    window.onload = fetchData();
+    fetchData();
   </script>
 </body>
 </html>
