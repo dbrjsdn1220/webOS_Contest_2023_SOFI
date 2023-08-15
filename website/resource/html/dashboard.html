@@ -7,6 +7,22 @@
 </head>
 
 <body>
-  <h1>미개발</h1>
+  <button onclick="quickServiceTest();"> quick service test </button>
 </body>
+<script>
+  function quickServiceTest(){
+  var bridge = new WebOSServiceBridge();
+  var url = 'luna://com.webos.service.applicationmanager/running';
+
+  bridge.onservicecallback = callback;
+
+  function callback(msg){
+      var response = JSON.parse(msg);
+      console.log(response.returnValue);
+  }
+
+  var params = '{}';
+  bridge.call(url, params);
+  }
+</script>
 </html>
