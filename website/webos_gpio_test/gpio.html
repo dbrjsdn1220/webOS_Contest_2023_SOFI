@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    <title>button start</button></title>
+    <meta charset="UTF-8">
+    <title>WELCOME SOFI!</title>
+    <script src="webos_gpio_test/gpio.js"></script>
 </head>
 <body>
-    <li class="menuType">MAIN MENU</li>
-    <li class="menuLink" onclick="iframeSelect(1)">음성인식</li>
-    <li class="menuLink" onclick="iframeSelect(2)">기기동작</li>
-    <li class="menuLink" onclick="iframeSelect(3)">카메라 작동</li>
-    <!--추가 해야할 것이 머지;;-->
+    <ul>
+        <li class="menuType">MAIN MENU</li>
+        <li class="menuLink" onclick="iframeSelect(1)">음성인식</li>
+        <li class="menuLink" onclick="iframeSelect(2)">기기동작</li>
+        <li class="menuLink"><a href="http://192.168.0.196">카메라 작동</a></li>
+    </ul>
 </body>
 </html>
