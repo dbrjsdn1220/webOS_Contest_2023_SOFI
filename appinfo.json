@@ -1,0 +1,13 @@
+{
+  "id": "com.sofi.app",
+  "version": "1.0.0",
+  "vendor": "VOID MIAN",
+  "type": "web",
+  "main": "website/start_sofi.html",
+  "title": "SOFI",
+  "icon": "website/resource/icons/sofi.png",
+  "requiredPermissions": [
+    "time.query",
+    "activity.operation"
+  ]
+}
