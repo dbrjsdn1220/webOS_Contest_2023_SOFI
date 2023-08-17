@@ -10,12 +10,23 @@
   <button onclick="quickServiceTest();"> quick service test </button>
   <script>
     var bridge = new WebOSServiceBridge();
-    function quickServiceTest(){
+
+    function CreateToastCallback(msg)
+    {
+      console.log("before");
+      var response = JSON.parse(msg);
+      console.log(reponse);
+    }
+
+    function quickServiceTest()
+    {
       var url = 'luna://com.webos.notification/createToast';
+
+      bridge.onservicecallback = CreateToastCallback;
+
       var params = {
         "message": "Hello, world!"
       };
-
       bridge.call(url, JSON.stringify(params));
     }
   </script>

@@ -9,7 +9,6 @@
   "requiredPermissions": [
     "time.query",
     "activity.operation",
-    "all",
-    "notification.operation"
+    "all"
   ]
 }
