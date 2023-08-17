@@ -1,5 +1,5 @@
 {
-  "id": "com.sofi.app",
+  "id": "app.sofi",
   "version": "1.0.0",
   "vendor": "VOID MIAN",
   "type": "web",
@@ -8,6 +8,8 @@
   "icon": "website/resource/icons/sofi.png",
   "requiredPermissions": [
     "time.query",
-    "activity.operation"
+    "activity.operation",
+    "all",
+    "notification.operation"
   ]
 }

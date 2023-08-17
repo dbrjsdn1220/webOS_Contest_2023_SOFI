@@ -5,6 +5,10 @@ const app = express();
 const port = 3000;
 const bodyParser = require('body-parser')
 
+//처음 접속 시, 연결할 사이트
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'start_sofi.html'));
+});
 app.use(express.static(path.join(__dirname, '/'))); //요청 시 모든 파일에 접근 가능하게 함.
 app.use(express.json());
 
@@ -71,6 +75,4 @@ app.delete('/deleteUser', (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`서버가 http://localhost:${port}/start_sofi.html 에서 실행 중입니다.`);
-});
+app.listen(port, '0.0.0.0');
