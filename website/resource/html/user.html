@@ -42,6 +42,61 @@
   <ul id="dataList"></ul>
   
   <script>
+    const bridge = new WebOSServiceBridge();
+    const kindID = "com.webos.service.sofi:1";
+
+    //데이터베이스 디자이닝
+    function putKind() {
+      let url = 'luna://com.webos.service.db/putKind';
+      bridge.onservicecallback = (msg) => {console.log(msg)};
+      let params = {
+        "id": kindID,
+        "owner": "com.webos.service.sofi",
+        "indexes": [
+          {
+            "name": "index0",
+            "props": [
+              {"name": "name"}
+            ]
+          },
+          {
+            "name": "index1",
+            "props": [
+              {"name": "allergy"}
+            ]
+          }
+        ]
+      };
+      bridge.call(url, JSON.stringify(params));
+    }
+
+    //데이터베이스 권한 설정
+    function putPermissions() {
+      let url = 'luna://com.webos.service.db/putKind';
+      bridge.onservicecallback = (msg) => {console.log(msg)};
+      let params = {
+        "permissions": [
+          {
+            "operations":{
+              "read": "allow",
+              "create": "allow",
+              "update": "allow",
+              "delete": "allow"
+            },
+            "object": kindID,
+            "type": "db.kind",
+            "cllaer": "com.webos.service.sofi"
+          }
+        ]
+      };
+      bridge.call(url, JSON.stringify(params));
+    }
+    
+    //
+
+
+
+
     //서버 user.json에 입력한 값을 저장하는 기능
     document.getElementById('dataForm').addEventListener('submit', function(event) {
       const name = document.getElementById('name').value;
