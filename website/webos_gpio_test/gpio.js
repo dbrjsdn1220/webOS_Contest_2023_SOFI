@@ -1,5 +1,10 @@
 var bridge = new WebOSServiceBridge();
 
+function cam_check()
+{
+    var ur1 = 'luna://com.webos.service.camera2/close';
+}
+
 function checkMic()
 {
     //음성인식 시작
