@@ -22,7 +22,7 @@
     {
       var url = 'luna://com.webos.notification/createToast';
 
-      bridge.onservicecallback = CreateToastCallback;
+      bridge.onservicecallback = CreateToastCallback();
 
       var params = {
         "message": "Hello, world!"
