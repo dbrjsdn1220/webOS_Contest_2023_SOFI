@@ -24,7 +24,7 @@
   <script>
     window.onload = function() {
       var loading = document.getElementById("loading");
-      var blurAmount = 25;
+      var blurAmount = 10;
       setInterval(function() {
         blurAmount -= 0.1;
         loading.style.filter = "blur(" + blurAmount + "px)";
@@ -33,7 +33,7 @@
       function redirectToIndex() {
         window.location.href = "index.html";
       }
-      setTimeout(redirectToIndex, 3000);
+      setTimeout(redirectToIndex, 2500);
     };
   </script>
 </body>

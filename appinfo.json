@@ -1,11 +1,14 @@
 {
   "id": "app.sofi",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "vendor": "VOID MIAN",
   "type": "web",
   "main": "website/start_sofi.html",
   "title": "SOFI",
-  "icon": "website/resource/icons/sofi.png",
+  "icon": "website/resource/icons/menuDashboard_black.png",
+  "allowVideoCapture": true,
+  "allowAudioCapture": true,
+  "enableWebOSVDA": true,
   "requiredPermissions": [
     "time.query",
     "activity.operation",
