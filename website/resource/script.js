@@ -83,39 +83,5 @@ function iframeSelect(selector) // 메뉴 선택 시 웹사이트 이동
   }
 }
 
-function aiVoiceService() //Google Assistance 사용
-{
-    //음성인식 시작
-    var url = 'luna://com.webos.service.ai.voice/start';
-    bridge.onservicecallback = AiVoiceStartCallback();
-    var params = {
-        "mode": "continuous",
-        "keywordDetect": true
-    };
-    bridge.call(url, JSON.stringify(params));
-
-    //음성인식 응답
-    url = 'luna://com.webos.service.ai.voice/getResponse';
-    bridge.onservicecallback = AiVoiceGetResponseCallback();
-    params = {
-        "subscribe": true
-    };
-    bridge.call(url, JSON.stringify(params));
-}
-
-window.onload = function(){
-  volumeControl(10); //초기 음량 설정
-  iframeSelect(1); //초기 페이지 접속
-  aiVoiceService(); // Google Assistant 작동 시작
-}
-
-function AiVoiceStartCallback(msg)
-{
-    var response = JSON.parse(msg);
-    console.log(response);
-}
-function AiVoiceGetResponseCallback(msg)
-{
-    var response = JSON.parse(msg);
-    console.log(response);
-}
+window.onload = volumeControl(10); //초기 음량 설정
+window.onload = iframeSelect(1); //초기 페이지 접속

@@ -37,21 +37,24 @@
     </select>
     <pre><button type="submit">저장</button></pre>
   </form>
-
   <h1>사용자 삭제</h1>
   <ul id="dataList"></ul>
   
   <script>
     const bridge = new WebOSServiceBridge();
-    const kindID = "com.webos.service.sofi:1";
+
+    window.onload = function() {
+      putKind();
+      putPermissions();
+    }
 
     //데이터베이스 디자이닝
     function putKind() {
       let url = 'luna://com.webos.service.db/putKind';
       bridge.onservicecallback = (msg) => {console.log(msg)};
       let params = {
-        "id": kindID,
-        "owner": "com.webos.service.sofi",
+        "id": "app.sofi.db.user:1",
+        "owner": "app.sofi.db.user",
         "indexes": [
           {
             "name": "index0",
@@ -64,6 +67,12 @@
             "props": [
               {"name": "allergy"}
             ]
+          },
+          {
+            "name": "index2",
+            "props": [
+              {"name": "id"}
+            ]
           }
         ]
       };
@@ -72,7 +81,7 @@
 
     //데이터베이스 권한 설정
     function putPermissions() {
-      let url = 'luna://com.webos.service.db/putKind';
+      let url = 'luna://com.webos.service.db/putPermissions';
       bridge.onservicecallback = (msg) => {console.log(msg)};
       let params = {
         "permissions": [
@@ -83,9 +92,9 @@
               "update": "allow",
               "delete": "allow"
             },
-            "object": kindID,
+            "object": "app.sofi.db.user:1",
             "type": "db.kind",
-            "cllaer": "com.webos.service.sofi"
+            "caller": "app.sofi.db.user"
           }
         ]
       };
@@ -95,19 +104,21 @@
     //데이터 화면에 출력
     function showData(res) {
       let user = JSON.parse(res).results;
-
+      alert("출력 되냐?");
       let text = '';
+
       for (let i in results) {
-        text +=
-        `이름: ${user[i].name}, 알러지: ${user.allergy}
-        <button onclick="deleteUser(${user.id})">삭제</button>`;
+        text.innerHTML =`
+          이름: ${user[i].name}, 알러지: ${user[i].allergy}
+          <button onclick="deleteUser(${user[i].id})">삭제</button>`;
+        document.getElementById('dataList').appendChild(text);
       }
-      document.getElementById('dataList').innerHTML = text;
     }
 
     //입력한 값을 데이터베이스에 저장
     document.getElementById('dataForm').addEventListener('submit', function(event) {
       let url = 'luna://com.webos.service.db/put';
+      alert("제출 진입");
       bridge.onservicecallback = showData;
 
       let params = {
@@ -115,18 +126,14 @@
           {
             "_kind": kindID,
             "name": document.getElementById('name').value,
-            "allergy": document.getElementById('allergy').value
+            "allergy": document.getElementById('allergy').value,
+            "number": 0
           }
         ]
       };
+      alert("데이터 저장되기 직전!");
       bridge.call(url, JSON.stringify(params));
     });
-
-    window.onload = function() {
-      putKind();
-      putPermissions();
-      showData();
-    }
   </script>
 </body>
 </html>
