@@ -76,7 +76,7 @@ function checkMic()
 {
     //음성인식 시작
     var url = 'luna://com.webos.service.ai.voice/start';
-    bridge.onservicecallback = AiVoiceStartCallback();
+    bridge.onservicecallback = AiVoiceCallback();
     var params = {
         "mode": "continuous",
         "keywordDetect": true
@@ -85,20 +85,13 @@ function checkMic()
 
     //음성인식 응답
     url = 'luna://com.webos.service.ai.voice/getResponse';
-    bridge.onservicecallback = AiVoiceGetResponseCallback();
+    bridge.onservicecallback = AiVoiceCallback();
     params = {
         "subscribe": true
     };
     bridge.call(url, JSON.stringify(params));
 }
-
-function AiVoiceStartCallback(msg)
-{
-    var response = JSON.parse(msg);
-    console.log(response);
-}
-
-function AiVoiceGetResponseCallback(msg)
+function AiVoiceCallback(msg)
 {
     var response = JSON.parse(msg);
     console.log(response);
