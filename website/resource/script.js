@@ -10,6 +10,7 @@ function mute() //소리 음소거하는 함수
 
     //LS2 API 사용한 소리 0
     var url = 'luna://com.webos.service.audio/master/setVolume';
+    bridge.onservicecallback = callback;
     var params = {
       "soundOutput": "pcm_output",
       "volume": 0
@@ -40,6 +41,7 @@ function volumeControl(number) //소리 조절하는 함수
   }
   //LS2 API 사용한 소리 조절
   var url = 'luna://com.webos.service.audio/master/setVolume';
+  bridge.onservicecallback = callback;
   var params = {
     "soundOutput": "pcm_output",
     "volume": number*10
@@ -81,6 +83,31 @@ function iframeSelect(selector) // 메뉴 선택 시 웹사이트 이동
       colorChange.style = "background-color: none";
     }
   }
+}
+
+function aiVoiceStart()
+{
+    //음성인식 시작
+    var url = 'luna://com.webos.service.ai.voice/start';
+    bridge.onservicecallback = callback;
+    var params = {
+        "mode": "continuous",
+        "keywordDetect": true
+    };
+    bridge.call(url, JSON.stringify(params));
+
+    //음성인식 응답
+    url = 'luna://com.webos.service.ai.voice/getResponse';
+    bridge.onservicecallback = AiVoiceCallback;
+    params = {
+        "subscribe": true
+    };
+    bridge.call(url, JSON.stringify(params));
+}
+function callback(msg)
+{
+    var response = JSON.parse(msg);
+    console.log(response);
 }
 
 window.onload = volumeControl(10); //초기 음량 설정

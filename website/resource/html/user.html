@@ -5,7 +5,7 @@
   <title>HOME</title>
   <link rel="stylesheet" href="../styles.css">
 </head>
-
+ 
 <body id=frame>
   <h1>사용자 추가</h1>
   유의사항: 다중 알레르기가 있다면 같은 방식으로 여러 번 진행해주세요.<br><br>
@@ -37,103 +37,72 @@
     </select>
     <pre><button type="submit">저장</button></pre>
   </form>
+ 
   <h1>사용자 삭제</h1>
   <ul id="dataList"></ul>
-  
+ 
   <script>
-    const bridge = new WebOSServiceBridge();
-
-    window.onload = function() {
-      putKind();
-      putPermissions();
-    }
-
-    //데이터베이스 디자이닝
-    function putKind() {
-      let url = 'luna://com.webos.service.db/putKind';
-      bridge.onservicecallback = (msg) => {console.log(msg)};
-      let params = {
-        "id": "app.sofi.db.user:1",
-        "owner": "app.sofi.db.user",
-        "indexes": [
-          {
-            "name": "index0",
-            "props": [
-              {"name": "name"}
-            ]
-          },
-          {
-            "name": "index1",
-            "props": [
-              {"name": "allergy"}
-            ]
-          },
-          {
-            "name": "index2",
-            "props": [
-              {"name": "id"}
-            ]
-          }
-        ]
-      };
-      bridge.call(url, JSON.stringify(params));
-    }
-
-    //데이터베이스 권한 설정
-    function putPermissions() {
-      let url = 'luna://com.webos.service.db/putPermissions';
-      bridge.onservicecallback = (msg) => {console.log(msg)};
-      let params = {
-        "permissions": [
-          {
-            "operations":{
-              "read": "allow",
-              "create": "allow",
-              "update": "allow",
-              "delete": "allow"
-            },
-            "object": "app.sofi.db.user:1",
-            "type": "db.kind",
-            "caller": "app.sofi.db.user"
-          }
-        ]
-      };
-      bridge.call(url, JSON.stringify(params));
-    }
-    
-    //데이터 화면에 출력
-    function showData(res) {
-      let user = JSON.parse(res).results;
-      alert("출력 되냐?");
-      let text = '';
-
-      for (let i in results) {
-        text.innerHTML =`
-          이름: ${user[i].name}, 알러지: ${user[i].allergy}
-          <button onclick="deleteUser(${user[i].id})">삭제</button>`;
-        document.getElementById('dataList').appendChild(text);
-      }
-    }
-
-    //입력한 값을 데이터베이스에 저장
+    //서버 user.json에 입력한 값을 저장하는 기능
     document.getElementById('dataForm').addEventListener('submit', function(event) {
-      let url = 'luna://com.webos.service.db/put';
-      alert("제출 진입");
-      bridge.onservicecallback = showData;
-
-      let params = {
-        "objects": [
-          {
-            "_kind": kindID,
-            "name": document.getElementById('name').value,
-            "allergy": document.getElementById('allergy').value,
-            "number": 0
-          }
-        ]
-      };
-      alert("데이터 저장되기 직전!");
-      bridge.call(url, JSON.stringify(params));
+      const name = document.getElementById('name').value;
+      const allergy = document.getElementById('allergy').value;
+      const user = { name, allergy };
+ 
+      fetch('/saveUser', {
+        method: 'POST', //post 메서드 (파일생성)
+        headers: {
+          'Content-Type': 'application/json' //json 형태의 파일을 다룸.
+        },
+        body: JSON.stringify(user)
+      })
+      .then(response => response.text()) //텍스트의 형태로
+      .then(message => {
+        console.log(message);
+      })
+      .catch(error => {
+        console.error('오류 발생:', error);
+      });
     });
+ 
+    //데이터를 서버로부터 받아와 화면에 출력
+    function fetchData() {
+      fetch('/getData')
+      .then(response => response.json())
+      .then(data => {
+        const dataList = document.getElementById('dataList');
+        dataList.innerHTML = ''; // 기존 목록 초기화
+ 
+        data.forEach(user => {
+          const listItem = document.createElement('li');
+          listItem.innerHTML = `
+            이름: ${user.name}, 알러지: ${user.allergy}
+            <button onclick="deleteUser(${user.id})">삭제</button>`;
+          dataList.appendChild(listItem); //변수 각각의 값을 dataList에 추가
+        });
+      })
+      .catch(error => {
+        console.error('오류 발생:', error);
+      });
+    }
+ 
+    function deleteUser(id) {
+      fetch(`/deleteUser`, {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({id})
+      })
+      .then(response => response.text())
+      .then(message => {
+        console.log(message);
+        fetchData(); // 데이터 삭제 후 데이터 다시 불러오기
+      })
+      .catch(error => {
+        console.error('오류 발생:', error);
+      });
+    }
+    fetchData();
   </script>
 </body>
 </html>
