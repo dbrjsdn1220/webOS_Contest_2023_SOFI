@@ -1,35 +1,16 @@
-var muteCheck = 0; //음소거 상태인지 확인하는 변수
 var volumeImage = document.getElementById("volumeImage"); 
 var bridge = new WebOSServiceBridge();
 
-function mute() //소리 음소거하는 함수
-{
-  if(muteCheck == 0){
-    muteCheck = 1;
-    volumeImage.src = "resource/icons/mute.png";
-
-    //LS2 API 사용한 소리 0
-    var url = 'luna://com.webos.service.audio/master/setVolume';
-    bridge.onservicecallback = callback;
-    var params = {
-      "soundOutput": "pcm_output",
-      "volume": 0
-    };
-    bridge.call(url, JSON.stringify(params));
-
-    for(i=10; i>0; i--){
-      var volumeSet = document.getElementById("volume"+i);
-      volumeSet.style="background-color: white";
-    }
-  }
-}
-    
 function volumeControl(number) //소리 조절하는 함수
 {
-  if(muteCheck == 1){
-    muteCheck = 0;
+  var volumeImage = document.getElementById("volumeImage"); 
+  if(number > 0){
     volumeImage.src = "resource/icons/nonMute.png";
   }
+  else if(number == 0){
+    volumeImage.src = "resource/icons/mute.png";
+  }
+
   for(i=1; i<=10; i++){
     var volumeSet = document.getElementById("volume"+i);
     if(i<=number){
@@ -110,5 +91,8 @@ function callback(msg)
     console.log(response);
 }
 
-window.onload = volumeControl(10); //초기 음량 설정
-window.onload = iframeSelect(1); //초기 페이지 접속
+window.onload = function() {
+  volumeControl(10); //초기 음량 설정
+  iframeSelect(1); //초기 페이지 접속
+  aiVoiceStart();
+}

@@ -16,7 +16,7 @@ let data = []; // 데이터를 저장할 배열
  
 //website/user.json의 파일을 읽어 data 배열에 저장. 해당 파일이 없다면 catch로 오류 구문 출력.
 try {
-    data = JSON.parse(fs.readFileSync('website/user.json'));
+    data = JSON.parse(fs.readFileSync('user.json'));
 } catch (error) {
     console.error('기존 데이터를 가져오는 도중 오류 발생:', error);
 }
@@ -42,7 +42,7 @@ app.post('/saveUser', (req, res) => {
     const userData = {id: userID, name, allergy};
     data.push(userData); // data 배열에 userData push
  
-    fs.writeFile('website/user.json', JSON.stringify(data, null, 2), (err) => {
+    fs.writeFile('user.json', JSON.stringify(data, null, 2), (err) => {
         if (err) {
             console.error('데이터 저장 중 오류 발생:', err);
             res.status(500).send('데이터를 저장하는 중 오류가 발생했습니다.');
@@ -64,7 +64,7 @@ app.delete('/deleteUser', (req, res) => {
     }
   }
   data.splice(deleteUser, 1);
-  fs.writeFile('website/user.json', JSON.stringify(data, null, 2), (err) => {
+  fs.writeFile('user.json', JSON.stringify(data, null, 2), (err) => {
     if (err) {
       console.error('데이터 삭제하는 중 오류 발생:', err);
       res.status(500).send('데이터를 삭제하는 중 오류가 발생했습니다.');
