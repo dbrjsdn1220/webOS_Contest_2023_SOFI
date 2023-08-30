@@ -3,7 +3,7 @@ var bridge = new WebOSServiceBridge();
 function cam_check()
 {
     var ur1 = 'luna://com.webos.service.peripheralmanager/gpio/list';
-    bridge.onservicecallback = AiVoiceStartCallback;
+    bridge.onservicecallback = msgCallback;
     params={
       "subscribed":false,
       "returnValue":true,
@@ -72,27 +72,36 @@ function cam_check()
    }
 }
 
-function checkMic()
-{
-    //음성인식 시작
-    var url = 'luna://com.webos.service.ai.voice/start';
-    bridge.onservicecallback = callback;
-    var params = {
+function aiVoiceStart()
+    {
+      //테스트
+      var url = 'luna://com.webos.notification/createToast';
+      bridge.onservicecallback = msgCallback;
+      var params = {
+        "message": "Snowboy 로 음성안내 서비스를 사용"
+      };
+      bridge.call(url, JSON.stringify(params));
+
+      //음성인식 시작
+      var url = 'luna://com.webos.service.ai.voice/start';
+      bridge.onservicecallback = msgCallback;
+      var params = {
         "mode": "continuous",
         "keywordDetect": true
-    };
-    bridge.call(url, JSON.stringify(params));
+      };
+      bridge.call(url, JSON.stringify(params));
 
-    //음성인식 응답
-    url = 'luna://com.webos.service.ai.voice/getResponse';
-    bridge.onservicecallback = AiVoiceCallback;
-    params = {
-        "subscribe": true
-    };
-    bridge.call(url, JSON.stringify(params));
-}
-function callback(msg)
-{
-    var response = JSON.parse(msg);
-    console.log(response);
-}
+      //음성인식 응답
+      url = 'luna://com.webos.service.ai.voice/getResponse';
+      bridge.onservicecallback = msgCallback;
+      params = {
+       "subscribe": true
+      };
+      bridge.call(url, JSON.stringify(params));
+    }
+
+    function msgCallback(msg)
+    {
+      var response = JSON.parse(msg);
+      console.log(response);
+    }

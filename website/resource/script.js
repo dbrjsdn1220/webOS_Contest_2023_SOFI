@@ -22,7 +22,7 @@ function volumeControl(number) //소리 조절하는 함수
   }
   //LS2 API 사용한 소리 조절
   var url = 'luna://com.webos.service.audio/master/setVolume';
-  bridge.onservicecallback = callback;
+  bridge.onservicecallback = msgCallback;
   var params = {
     "soundOutput": "pcm_output",
     "volume": number*10
@@ -66,34 +66,7 @@ function iframeSelect(selector) // 메뉴 선택 시 웹사이트 이동
   }
 }
 
-function aiVoiceStart()
-{
-  //테스트
-  var url = 'luna://com.webos.notification/createToast';
-  bridge.onservicecallback = callback;
-  var params = {
-    "message": "'스노우보이'로 인공지능 음성안내 서비스를 사용해보세요."
-  };
-  bridge.call(url, JSON.stringify(params));
-
-  //음성인식 시작
-  var url = 'luna://com.webos.service.ai.voice/start';
-  bridge.onservicecallback = callback;
-  var params = {
-    "mode": "continuous",
-    "keywordDetect": true
-  };
-  bridge.call(url, JSON.stringify(params));
-
-  //음성인식 응답
-  url = 'luna://com.webos.service.ai.voice/getResponse';
-  bridge.onservicecallback = callback;
-  params = {
-    "subscribe": true
-  };
-  bridge.call(url, JSON.stringify(params));
-}
-function callback(msg)
+function msgCallback(msg)
 {
   var response = JSON.parse(msg);
   console.log(response);

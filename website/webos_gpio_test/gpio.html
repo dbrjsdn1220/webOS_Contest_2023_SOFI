@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>WELCOME SOFI!</title>
-    <script src="webos_gpio_test/gpio.js"></script>
+    <script src="gpio.js"></script>
 </head>
 <body>
     <ul>
         <li class="menuType">MAIN MENU</li>
-        <li class="menuLink" onclick="checkMic()">음성인식</li>
+        <button class="menuLink" onclick="aiVoiceStart()">음성인식</button>
         <li class="menuLink" onclick="iframeSelect(2)">기기동작</li>
         <li class="menuLink"><a href="http://192.168.0.196">카메라 작동</a></li>
         <li class="menuLink"><a href="https://theqoo.net/square/561464688">사운드 체크</li>
     </ul>
 </body>
-<script src="gpio.js"></script>
 </html>
