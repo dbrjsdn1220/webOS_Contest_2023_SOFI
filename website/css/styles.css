@@ -48,19 +48,19 @@
 /* put icon on the menu */
 #menu1 {
   padding-left: 50px;
-  background: url("icons/menuDashboard_black.png") 5% 50% no-repeat;
+  background: url("../img/menuDashboard_black.png") 5% 50% no-repeat;
 }
 #menu2 {
   padding-left: 50px;
-  background: url("icons/menuUser_black.png") 5% 50% no-repeat;
+  background: url("../img/menuUser_black.png") 5% 50% no-repeat;
 }
 #menu3 {
   padding-left: 50px;
-  background: url("icons/menuAllergy_black.png") 5% 50% no-repeat;
+  background: url("../img/menuAllergy_black.png") 5% 50% no-repeat;
 }
 #menu4 {
   padding-left: 50px;
-  background: url("icons/menuHowtocook_black.png") 5% 50% no-repeat;
+  background: url("../img/menuHowtocook_black.png") 5% 50% no-repeat;
 }
 
 /* iframe 속성 사이즈 */
