@@ -35,38 +35,16 @@
       <option value="조개류">조개류(굴, 전복, 홍합 포함)</option>
       <option value="잣">잣</option>
     </select>
-    <pre><button type="submit">저장</button></pre>
+    <pre><button type="submit" onclick="save()">저장</button></pre>
   </form>
  
   <h1>사용자 삭제</h1>
   <ul id="dataList"></ul>
  
   <script>
-    //서버 user.json에 입력한 값을 저장하는 기능
-    document.getElementById('dataForm').addEventListener('submit', function(event) {
-      const name = document.getElementById('name').value;
-      const allergy = document.getElementById('allergy').value;
-      const user = { name, allergy };
- 
-      fetch('/saveUser', {
-        method: 'POST', //post 메서드 (파일생성)
-        headers: {
-          'Content-Type': 'application/json' //json 형태의 파일을 다룸.
-        },
-        body: JSON.stringify(user)
-      })
-      .then(response => response.text()) //텍스트의 형태로
-      .then(message => {
-        console.log(message);
-      })
-      .catch(error => {
-        console.error('오류 발생:', error);
-      });
-    });
- 
     //데이터를 서버로부터 받아와 화면에 출력
     function fetchData() {
-      fetch('/getData')
+      fetch('http://101.101.219.171:5556/getData')
       .then(response => response.json())
       .then(data => {
         const dataList = document.getElementById('dataList');
@@ -84,9 +62,31 @@
         console.error('오류 발생:', error);
       });
     }
+
+    //서버 user.json에 입력한 값을 저장하는 기능
+    function save() {
+      const name = document.getElementById('name').value;
+      const allergy = document.getElementById('allergy').value;
+      const user = { name, allergy };
+ 
+      fetch('http://101.101.219.171:5556/saveData', {
+        method: 'POST', //post 메서드 (파일생성)
+        headers: {
+          'Content-Type': 'application/json' //json 형태의 파일을 다룸.
+        },
+        body: JSON.stringify(user)
+      })
+      .then(response => response.text()) //텍스트의 형태로
+      .then(message => {
+        console.log(message);
+      })
+      .catch(error => {
+        console.error('오류 발생:', error);
+      });
+    };
  
     function deleteUser(id) {
-      fetch(`/deleteUser`, {
+      fetch(`http://101.101.219.171:5556/deleteData`, {
         method: 'DELETE',
         headers: {
           "Content-Type": "application/json"
