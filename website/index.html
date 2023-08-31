@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>WELCOME SOFI!</title>
-  <link rel="stylesheet" href="resource/styles.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/script.js"></script>
 </head>
 
 <body style="background-color: white;">
@@ -18,11 +19,11 @@
     <div class="volumeBox" id="volume3" onclick="volumeControl(3)"></div>
     <div class="volumeBox" id="volume2" onclick="volumeControl(2)"></div>
     <div class="volumeBox" id="volume1" onclick="volumeControl(1)"></div>
-    <img id="volumeImage" src="resource/icons/nonMute.png" onclick="volumeControl(0)">
+    <img id="volumeImage" src="img/nonMute.png" onclick="volumeControl(0)">
   </header>
 
   <section id="menuBar"> <!--좌측에 메뉴선택하는 부분-->
-    <img src="resource/icons/sofi.png" id="logo">
+    <img src="img/sofi.png" id="logo">
     <nav>
       <li class="menuType">HOME</li>
       <li class="menuLink" id="menu1" onclick="iframeSelect(1)">대시보드</li>
@@ -34,7 +35,5 @@
     </nav>
   </section>
   <iframe id="iframe"></iframe>
-
-  <script src="resource/script.js"></script>
 </body>
 </html>

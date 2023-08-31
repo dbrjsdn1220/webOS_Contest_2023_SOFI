@@ -78,7 +78,7 @@ function aiVoiceStart()
       var url = 'luna://com.webos.notification/createToast';
       bridge.onservicecallback = msgCallback;
       var params = {
-        "message": "Snowboy 로 음성안내 서비스를 사용"
+        "message": "음성안내 서비스 시작"
       };
       bridge.call(url, JSON.stringify(params));
 

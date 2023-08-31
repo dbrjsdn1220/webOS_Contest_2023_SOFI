@@ -7,8 +7,8 @@ const port = 5556;
 /*처음 접속 시, 연결할 사이트
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'start_sofi.html'));
-});
-app.use(express.static(path.join(__dirname, '/'))); //요청 시 user.json에 접근 가능. */
+}); 웹서버 안 씀
+app.use(express.static(path.join(__dirname, '/'))); //요청 시 모든 파일에 접근 가능. */
 
 app.use(express.json());
 let data = []; // 데이터를 저장할 배열
