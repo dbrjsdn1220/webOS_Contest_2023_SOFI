@@ -1,18 +1,20 @@
 var bridge = new WebOSServiceBridge();
 
-function cam_check()
+function gpio_test()
 {
     var url = 'luna://com.webos.service.peripheralmanager/gpio/open';
     bridge.onservicecallback = msgCallback;
     var params={
       "pin":"gpio21"
    }
+   bridge.call(url, JSON.stringify(params));
 
    var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
    var params={
       "pin":"gpio21", 
       "direction":"outHigt"
    }
+   bridge.call(url, JSON.stringify(params));
 }
 
 function aiVoiceStart()
