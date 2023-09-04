@@ -2,73 +2,16 @@ var bridge = new WebOSServiceBridge();
 
 function cam_check()
 {
-    var ur1 = 'luna://com.webos.service.peripheralmanager/gpio/list';
+    var url = 'luna://com.webos.service.peripheralmanager/gpio/open';
     bridge.onservicecallback = msgCallback;
-    params={
-      "subscribed":false,
-      "returnValue":true,
-      "gpioList":[
-         {
-            "pin":"gpio12",
-            "status":"available"
-         },
-         {
-            "pin":"gpio13",
-            "status":"available"
-         },
-         {
-            "pin":"gpio16",
-            "status":"available"
-         },
-         {
-            "pin":"gpio17",
-            "status":"available"
-         },
-         {
-            "pin":"gpio18",
-            "status":"available"
-         },
-         {
-            "pin":"gpio19",
-            "status":"available"
-         },
-         {
-            "pin":"gpio20",
-            "status":"available"
-         },
-         {
-            "pin":"gpio21",
-            "status":"available"
-         },
-         {
-            "pin":"gpio22",
-            "status":"available"
-         },
-         {
-            "pin":"gpio23",
-            "status":"available"
-         },
-         {
-            "pin":"gpio24",
-            "status":"available"
-         },
-         {
-            "pin":"gpio25",
-            "status":"available"
-         },
-         {
-            "pin":"gpio4",
-            "status":"available"
-         },
-         {
-            "pin":"gpio5",
-            "status":"available"
-         },
-         {
-            "pin":"gpio6",
-            "status":"available"
-         }
-      ]
+    var params={
+      "pin":"gpio21"
+   }
+
+   var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
+   var params={
+      "pin":"gpio21", 
+      "direction":"outHigt"
    }
 }
 
