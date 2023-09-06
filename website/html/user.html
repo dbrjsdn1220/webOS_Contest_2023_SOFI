@@ -45,7 +45,7 @@
   <script>
     //데이터를 서버로부터 받아와 화면에 출력
     function fetchData() {
-      fetch('http://101.101.219.171:5556/getData')
+      fetch('http://101.101.219.171:5556/getUser')
       .then(response => response.json())
       .then(data => {
         const dataList = document.getElementById('dataList');
@@ -70,8 +70,8 @@
       const allergy = document.getElementById('allergy').value;
       const user = { name, allergy };
  
-      fetch('http://101.101.219.171:5556/saveData', {
-        method: 'POST', //post 메서드 (파일생성)
+      fetch('http://101.101.219.171:5556/saveUser', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json' //json 형태의 파일을 다룸.
         },
@@ -87,7 +87,7 @@
     };
  
     function deleteUser(id) {
-      fetch(`http://101.101.219.171:5556/deleteData`, {
+      fetch(`http://101.101.219.171:5556/deleteUser`, {
         method: 'DELETE',
         headers: {
           "Content-Type": "application/json"

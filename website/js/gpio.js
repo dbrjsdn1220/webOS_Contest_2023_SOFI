@@ -12,24 +12,16 @@ function gpio_test()
    var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
    var params={
       "pin":"gpio21", 
-      "direction":"outHigt"
+      "direction":"outHigh"
    }
    bridge.call(url, JSON.stringify(params));
 }
 
 function aiVoiceStart()
     {
-      //테스트
-      var url = 'luna://com.webos.notification/createToast';
-      bridge.onservicecallback = msgCallback;
-      var params = {
-        "message": "음성안내 서비스 시작"
-      };
-      bridge.call(url, JSON.stringify(params));
-
       //음성인식 시작
       var url = 'luna://com.webos.service.ai.voice/start';
-      bridge.onservicecallback = msgCallback;
+      bridge.onservicecallback = testCallback;
       var params = {
         "mode": "continuous",
         "keywordDetect": true
@@ -45,8 +37,23 @@ function aiVoiceStart()
       bridge.call(url, JSON.stringify(params));
     }
 
-    function msgCallback(msg)
-    {
+    function msgCallback(msg) {
       var response = JSON.parse(msg);
-      console.log(response);
-    }
+ 
+      fetch('http://101.101.219.171:5556/saveUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json' //json 형태의 파일을 다룸.
+        },
+        body: JSON.stringify(response)
+      })
+      .then(response => response.text()) //텍스트의 형태로
+      .then(message => {
+        console.log(message);
+      })
+      .catch(error => {
+        console.error('오류 발생:', error);
+      });
+    };
+
+    
