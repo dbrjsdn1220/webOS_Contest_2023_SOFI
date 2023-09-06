@@ -22,7 +22,7 @@ function aiVoiceStart()
     {
       //음성인식 시작
       var url = 'luna://com.webos.service.ai.voice/start';
-      bridge.onservicecallback = testCallback;
+      bridge.onservicecallback = msgCallback;
       var params = {
         "mode": "continuous",
         "keywordDetect": true
@@ -39,14 +39,12 @@ function aiVoiceStart()
     }
 
     function msgCallback(msg) {
-      var response = JSON.parse(msg);
- 
-      fetch('http://101.101.219.171:5556/saveUser', {
+      fetch('http://101.101.219.171:5556/logCheck', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json' //json 형태의 파일을 다룸.
         },
-        body: JSON.stringify(response)
+        body: msg
       })
       .then(response => response.text()) //텍스트의 형태로
       .then(message => {
@@ -56,5 +54,4 @@ function aiVoiceStart()
         console.error('오류 발생:', error);
       });
     };
-
     
