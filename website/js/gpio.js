@@ -10,9 +10,10 @@ function gpio_test()
    bridge.call(url, JSON.stringify(params));
 
    var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
+   bridge.onservicecallback = msgCallback;
    var params={
       "pin":"gpio21", 
-      "direction":"outHigt"
+      "direction":"outHigh"
    }
    bridge.call(url, JSON.stringify(params));
 }
