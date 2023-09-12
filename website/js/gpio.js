@@ -1,4 +1,5 @@
 var bridge = new WebOSServiceBridge();
+var sentence = "";
 
 function gpio_test()
 {
@@ -49,7 +50,7 @@ function aiVoiceStart()
   bridge.call(url, JSON.stringify(params));
 }
 
-function getState(msg)
+function getState(msg) //추후에 가능하면 state없이 response 바로 받아오도록 시도
 {
   //서버로 로그 보내는 부분
   fetch('http://101.101.219.171:5556/logCheck', {
@@ -62,20 +63,19 @@ function getState(msg)
   .then(response => response.text()) //텍스트의 형태로
   .then(message => {
     console.log(message);
+
+    if(JSON.parse(msg.state) == "answering") {
+      url = 'luna://com.webos.service.ai.voice/getResponse';
+      bridge.onservicecallback = getResponse;
+      params = {
+         "subscribe": true
+      };
+      bridge.call(url, JSON.stringify(params));
+    }
   })
   .catch(error => {
-    console.error('오류 발생:', error);
-  });
-
-  //되는지 확인해봐야 하는 부분임
-  if(msg == "thinking") {
-    url = 'luna://com.webos.service.ai.voice/getResponse';
-    bridge.onservicecallback = getResponse;
-    params = {
-       "subscribe": true
-    };
-    bridge.call(url, JSON.stringify(params));
-  }
+    console.error('GetState:', error);
+  });  
 }
 
 function getResponse(msg) 

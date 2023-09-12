@@ -35,7 +35,7 @@ function iframeSelect(selector)
 {
   var iframe = document.getElementById("iframe");
   var imageChange = document.getElementById("menu"+selector);
-  var max = 5; // 현재 누를 수 있는 메뉴의 개수
+  var max = 4; // 현재 누를 수 있는 메뉴의 개수
 
   //해당하는 웹페이지로 이동 및 색 변경
   if(selector==1){ // 대시보드
@@ -62,7 +62,7 @@ function iframeSelect(selector)
   for(i=1; i<=max; i++){ //선택되지 않은 메뉴 색 초기화
     var colorChange = document.getElementById("menu"+i);
     if(i!=selector){
-      colorChange.style = "background-color: none";
+      colorChange.style = "color: none";
     }
   }
 }
@@ -76,4 +76,4 @@ function msgCallback(msg)
 window.onload = function() {
   volumeControl(10); //초기 음량 설정
   iframeSelect(1); //초기 페이지 접속
-}
+};
