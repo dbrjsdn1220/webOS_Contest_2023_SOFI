@@ -17,7 +17,7 @@ function gpio_test()
     "direction":"outHigh"
   }
   bridge.call(url, JSON.stringify(params));
-  delay(10);
+  delay(1000);
   var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
   bridge.onservicecallback = msgCallback;
   var params={
