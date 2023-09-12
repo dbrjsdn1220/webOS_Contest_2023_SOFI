@@ -75,7 +75,8 @@ app.delete('/deleteUser', (req, res) => {
 
 //로그 출력
 app.post('/logCheck', (req, res) => {
-  console.log(req.body.response);
+  console.log(req.body);
+  res.send(JSON.stringify(req.body.state));
 })
  
 app.listen(port, () => {
