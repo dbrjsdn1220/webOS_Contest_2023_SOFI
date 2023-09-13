@@ -62,6 +62,10 @@
   padding-left: 50px;
   background: url("../img/menuHowtocook_black.png") 5% 50% no-repeat;
 }
+#menu5 {
+  padding-left: 50px;
+  background: url("../img/menuHowtocook_black.png") 5% 50% no-repeat;
+}
 
 /* iframe 속성 사이즈 */
 iframe {

@@ -35,7 +35,7 @@ function iframeSelect(selector)
 {
   var iframe = document.getElementById("iframe");
   var imageChange = document.getElementById("menu"+selector);
-  var max = 4; // 현재 누를 수 있는 메뉴의 개수
+  var max = 5; // 현재 누를 수 있는 메뉴의 개수
 
   //해당하는 웹페이지로 이동 및 색 변경
   if(selector==1){ // 대시보드
@@ -55,6 +55,10 @@ function iframeSelect(selector)
   }
   else if(selector==4){ // 요리법
     iframe.src = "https://www.10000recipe.com";
+    imageChange.style = 
+    "background: url('img/menuHowtocook_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
+  }
+  else if(selector==5){ // 요리법
     imageChange.style = 
     "background: url('img/menuHowtocook_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
