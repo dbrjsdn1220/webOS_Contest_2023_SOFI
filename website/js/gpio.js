@@ -1,6 +1,7 @@
 var bridge = new WebOSServiceBridge();
 var url, params;
 
+
 function gpio_test()
 {
   var url = 'luna://com.webos.service.peripheralmanager/gpio/open';
@@ -32,15 +33,29 @@ function hasGetUserMedia() {
 }
 
 function c_test(){
+  var url ='luna-send -n 1 -f luna://com.webos.service.camera2/open';
+  var params={
+    "id":"camera1"
+  }
+  bridge.call(url, JSON.stringify(params));
+
+  var url='luna-send -n 1 -f luna://com.webos.service.camera2/startPreview';
+  var url ={
+    "handle":2793,
+    "type":"posixshm",
+    "source":"0"
+  }
+  bridge.call(url, JSON.stringify(params));
+
   var url = 'luna-send -n 1 -f luna://com.webos.service.camera2/startCapture';
   var params={
-    "handle":6696,
+    "handle": 2793,
     "width": 640,
     "height": 480,
     "format": "JPEG",
     "mode":"MODE_BURST",
     "nimage":2,
-    "path":"/media/multimedia"
+    "path":"/home/root/c_t"
   }
   bridge.call(url, JSON.stringify(params));
   /*
