@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 const port = 5550;
-const multer = require('multer');
  
 /*처음 접속 시, 연결할 사이트
 app.get('/', (req, res) => {
