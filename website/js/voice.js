@@ -34,10 +34,20 @@ function voiceStop() //음성인식 종료
   params = {};
   bridge.call(url, JSON.stringify(params));
 }
+function ttsSpeak()
+{
+  url = 'luna://com.webos.service.tts/speak';
+  params = {
+    "text": sentence+"라고 얘기했어요.",
+    "language": "ko-KR"
+  };
+  bridge.call(url, JSON.stringify(params));
+}
 
 //음성인식
 function aiVoiceStart()
 {
+  voiceStop();
   voiceStart();
   voiceGetState();
 }
@@ -56,7 +66,7 @@ function getState(msg) //추후에 가능하면 state없이 response 바로 받�
   .then(response => response.text())
   .then(message => {
     console.log("getState", message);
-    if(message == "thinking"){
+    if(message == "recording"){
       voiceGetResponse();
     }
   })
@@ -92,7 +102,9 @@ function getSentence() {
   .then(response => response.text())
   .then(words => {
     console.log("words", words);
-    voiceStop();
+    if (words != "") {
+      sentence = words;
+    }
   })
   .catch(error => {
     console.error('오류 발생:', error);

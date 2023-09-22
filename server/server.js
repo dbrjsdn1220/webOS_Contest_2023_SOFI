@@ -88,7 +88,7 @@ app.post('/logCheckResponse', (req, res) => {
 });
 
 app.get('/getWords', (req, res) => {
-  res.send(words);
+  res.send(words.response.partial);
 });
  
 app.listen(port, () => {
