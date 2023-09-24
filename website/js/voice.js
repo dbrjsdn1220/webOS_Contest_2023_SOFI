@@ -13,7 +13,7 @@ function voiceStart() //음성인식 시작
 function voiceGetState() //음성인식 상태
 {
   url = 'luna://com.webos.service.ai.voice/getState';
-  bridge.onservicecallback = getState;
+  bridge.onservicecallback = getResponse;
   params = {
     "subscribe": true
   };
@@ -50,29 +50,7 @@ function aiVoiceStart()
   voiceStop();
   voiceStart();
   voiceGetState();
-}
-
-//음성인식 상태값
-function getState(msg) //추후에 가능하면 state없이 response 바로 받아오도록 시도
-{
-  //서버로 로그 보내는 부분
-  fetch('http://101.101.219.171:5556/logCheckState', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json' //json 형태의 파일을 다룸.
-    },
-    body: msg
-  })
-  .then(response => response.text())
-  .then(message => {
-    console.log("getState", message);
-    if(message == "recording"){
-      voiceGetResponse();
-    }
-  })
-  .catch(error => {
-    console.error('오류 발생:', error);
-  });
+  voiceGetResponse();
 }
 
 //음성인식 응답값
@@ -89,7 +67,9 @@ function getResponse(msg)
   .then(response => response.text())
   .then(message => {
     console.log("getResponse", message);
-    getSentence();
+
+    if(msg == `{"state":"thinking"}`)
+      getSentence();
   })
   .catch(error => {
     console.error('오류 발생:', error);
