@@ -1,5 +1,16 @@
 var bridge = new WebOSServiceBridge();
 
+//LS2 API 사용한 소리 조절
+function setVolume(volume)
+{
+  var url = 'luna://com.webos.service.audio/master/setVolume';
+  var params = {
+    "soundOutput": "pcm_output",
+    "volume": volume*10
+  };
+  bridge.call(url, JSON.stringify(params));
+}
+
 //소리 조절하는 함수
 function volumeControl(number)
 {
@@ -20,14 +31,8 @@ function volumeControl(number)
       volumeSet.style="background-color: white";
     }
   }
-  //LS2 API 사용한 소리 조절
-  var url = 'luna://com.webos.service.audio/master/setVolume';
-  bridge.onservicecallback = msgCallback;
-  var params = {
-    "soundOutput": "pcm_output",
-    "volume": number*10
-  };
-  bridge.call(url, JSON.stringify(params));
+
+  setVolume(number);
 }
 
 //메뉴 선택 시 웹사이트 이동
@@ -71,13 +76,3 @@ function iframeSelect(selector)
   }
 }
 
-function msgCallback(msg)
-{
-  var response = JSON.parse(msg);
-  console.log(response);
-}
-
-window.onload = function() {
-  volumeControl(10); //초기 음량 설정
-  iframeSelect(1); //초기 페이지 접속
-};
