@@ -1,6 +1,7 @@
+
 var bridge = new WebOSServiceBridge();
 var url, params;
-
+const saveDate = "/home/root/c_t/";// 사진 저장 위치
 
 function gpio_test()
 {
@@ -55,7 +56,7 @@ function c_test(){
     "format": "JPEG",
     "mode":"MODE_BURST",
     "nimage":2,
-    "path":"/home/root/c_t"
+    "path":savedate
   }
   bridge.call(url, JSON.stringify(params));
   /*
@@ -77,7 +78,55 @@ function c_test(){
   }
   */
 }
+
+function ESP_CAM_TEST() {
+  const http = require('http');
+  const fs = require('fs');
+  const imageUrl = 'http://192.168.0.196/capture';
+  const destinationPath = '/home/root/c_t/downloaded_image.jpg'; // 이미지를 저장할 경로 및 파일 이름
+
+  // HTTP GET 요청으로 이미지 다운로드
+  http.get(imageUrl, (response) => {
+  if (response.statusCode === 200) {
+    const fileStream = fs.createWriteStream(destinationPath);
+    response.pipe(fileStream);
+
+    fileStream.on('finish', () => {
+      fileStream.close();
+      console.log('이미지 다운로드 완료.');
+    });
+  } else {
+    console.error('이미지를 가져올 수 없습니다.');
+  }
+}).on('error', (error) => {
+  console.error('에러 발생:', error);
+});
+  /*
+  const cameraStream = 'http://192.168.0.196/capture'; // 카메라 웹 서버 주소
   
+  fetch(cameraStream)
+    .then((response) => {
+      if (!response.ok) {
+        console.error('카메라 스트림을 가져올 수 없음');
+        throw new Error('카메라 스트림을 가져올 수 없음');
+      }
+      return response.blob();
+    })
+    .then((blob) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'image.png'; // 다운로드할 파일 이름 설정
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      console.log( a.click());
+      document.body.removeChild(a);
+    })
+    .catch((error) => {
+      console.error('에러 발생:', error);
+    });
+    */
+}
 
 function delay(n){
   return new Promise(function(resolve){
