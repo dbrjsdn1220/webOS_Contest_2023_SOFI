@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 const port = 5556;
- 
+
 /*처음 접속 시, 연결할 사이트
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'start_sofi.html'));
@@ -12,7 +12,6 @@ app.use(express.static(path.join(__dirname, '/'))); //요청 시 모든 파일�
 
 app.use(express.json());
 let data = []; // 데이터를 저장할 배열
-let words = "";
 
 //user.json의 파일을 읽어 data 배열에 저장. 해당 파일이 없다면 catch로 오류 구문 출력.
 try {
@@ -73,19 +72,7 @@ app.delete('/deleteUser', (req, res) => {
     }
   });
 });
-
-//로그 출력
-app.post('/logCheckResponse', (req, res) => {
-  console.log(req.body);
-  res.send(req.body);
-  words = req.body;
-  //Displaytext 값이 나올 때 가장 마지막 partial 값만 전송하는 방법 시도해볼만 함. (권장도 함)
-});
-
-app.get('/getWords', (req, res) => {
-  res.send(words.response.partial);
-});
  
 app.listen(port, () => {
   console.log(`http://101.101.219.171:${port}/ 서버가 열렸습니다.`);
-});
+}); 
