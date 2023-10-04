@@ -8,16 +8,15 @@
 <body>
     <ul>
         <li class="menuType">MAIN MENU</li>
-        <button onclick="aiVoiceStart()">음성인식</button>
         <button onclick="gpio_test()">gpio_test</button>
-        <button onclick="c_test()">c_test</button>
-        <button onclick="ESP_CAM_TEST()">ESP32_CAM_TEST</button>
         <li><a href="http://192.168.0.196:81/stream">카메라 작동</a></li>
-        <li><a href="https://theqoo.net/square/561464688">사운드 체크</li>
+    </ul>
+    <ul>
+        <button onclick="c_open()">c_open</button>
+        <button onclick="c_preview()">c_preview</button>
+        <button onclick="c_capture()">c_capture</button>
     </ul>
     
     <script src="../js/gpio.js"></script>
 </body>
 </html>
-
-

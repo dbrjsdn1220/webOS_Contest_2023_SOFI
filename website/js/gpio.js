@@ -1,15 +1,14 @@
+var BridgeGpio = new WebOSServiceBridge();
+var url, params, handle;
 
-var bridge = new WebOSServiceBridge();
-var url, params;
-const saveDate = "/home/root/c_t/";// 사진 저장 위치
-
+/*
 function gpio_test()
 {
   var url = 'luna://com.webos.service.peripheralmanager/gpio/open';
   var params={
     "pin":"gpio21"
   }
-  bridge.call(url, JSON.stringify(params));
+  BridgeGpio.call(url, JSON.stringify(params));
 
    
   var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
@@ -17,49 +16,22 @@ function gpio_test()
     "pin":"gpio21", 
     "direction":"outHigh"
   }
-  bridge.call(url, JSON.stringify(params));
+  BridgeGpio.call(url, JSON.stringify(params));
   delay(10);
   var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
   var params={
     "pin":"gpio21", 
     "direction":"outLow"
   }
-  bridge.call(url, JSON.stringify(params));
+  BridgeGpio.call(url, JSON.stringify(params));
 }
 
 
-function hasGetUserMedia() {
+function hasGetUserMedia()
+{
   return !!(navigator.GetUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
-
 }
 
-function c_test(){
-  var url ='luna-send -n 1 -f luna://com.webos.service.camera2/open';
-  var params={
-    "id":"camera1"
-  }
-  bridge.call(url, JSON.stringify(params));
-
-  var url='luna-send -n 1 -f luna://com.webos.service.camera2/startPreview';
-  var url ={
-    "handle":2793,
-    "type":"posixshm",
-    "source":"0"
-  }
-  bridge.call(url, JSON.stringify(params));
-
-  var url = 'luna-send -n 1 -f luna://com.webos.service.camera2/startCapture';
-  var params={
-    "handle": 2793,
-    "width": 640,
-    "height": 480,
-    "format": "JPEG",
-    "mode":"MODE_BURST",
-    "nimage":2,
-    "path":savedate
-  }
-  bridge.call(url, JSON.stringify(params));
-  /*
   if (hasGetUserMedia()){
     console.log("getUserMedia() is supported in your browser");
   }
@@ -76,60 +48,77 @@ function c_test(){
       console.log("Something went wrong! " + error);
     });
   }
-  */
-}
+ */
 
-function ESP_CAM_TEST() {
-  const http = require('http');
-  const fs = require('fs');
-  const imageUrl = 'http://192.168.0.196/capture';
-  const destinationPath = '/home/root/c_t/downloaded_image.jpg'; // 이미지를 저장할 경로 및 파일 이름
-
-  // HTTP GET 요청으로 이미지 다운로드
-  http.get(imageUrl, (response) => {
-  if (response.statusCode === 200) {
-    const fileStream = fs.createWriteStream(destinationPath);
-    response.pipe(fileStream);
-
-    fileStream.on('finish', () => {
-      fileStream.close();
-      console.log('이미지 다운로드 완료.');
-    });
-  } else {
-    console.error('이미지를 가져올 수 없습니다.');
-  }
-}).on('error', (error) => {
-  console.error('에러 발생:', error);
-});
-  /*
-  const cameraStream = 'http://192.168.0.196/capture'; // 카메라 웹 서버 주소
-  
-  fetch(cameraStream)
-    .then((response) => {
-      if (!response.ok) {
-        console.error('카메라 스트림을 가져올 수 없음');
-        throw new Error('카메라 스트림을 가져올 수 없음');
-      }
-      return response.blob();
-    })
-    .then((blob) => {
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'image.png'; // 다운로드할 파일 이름 설정
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      console.log( a.click());
-      document.body.removeChild(a);
-    })
-    .catch((error) => {
-      console.error('에러 발생:', error);
-    });
-    */
-}
-
-function delay(n){
+//딜레이 n은 s단위
+function delay(n) {
   return new Promise(function(resolve){
       setTimeout(resolve,n*1000);
   });
+}
+
+//camera 사용
+function c_open() {
+  url = 'luna://com.webos.service.camera2/open';
+  BridgeGpio.onservicecallback = getHandle;
+  params = {
+    "id": "camera1"
+  };
+  BridgeGpio.call(url, JSON.stringify(params));
+}
+
+//카메라 값을 메모리에 받아오는 걸로 추정
+function c_preview() {
+  url='luna://com.webos.service.camera2/startPreview';
+  BridgeGpio.onservicecallback = getLog;
+  params = {
+    "handle": handle,
+    "params": {
+      "type":"sharedmemory",
+      "source":"0"
+    }
+  };
+  BridgeGpio.call(url, JSON.stringify(params));
+}
+
+//메모리에 있는 카메라 값 저장으로 추정
+function c_capture() {
+  url = 'luna://com.webos.service.camera2/startCapture';
+  BridgeGpio.onservicecallback = getLog;
+  params = {
+    "handle": handle,
+    "path": "/home/root/pics/",
+    "params": {
+      "width": 640,
+      "height": 480,
+      "format": "JPEG",
+      "mode":"MODE_ONESHOT"
+    }
+  };
+  BridgeGpio.call(url, JSON.stringify(params));
+}
+
+//카메라 핸들값 저장
+function getHandle(msg) {
+  handle = JSON.parse(msg).handle;
+  console.log("handle 값: ", handle);
+}
+//LS2 API 리턴값 로그로 출력
+function getLog(msg) {
+  console.log(msg);
+}
+
+//서버로 사진 전송
+function sendPic() {
+  
+}
+
+async function startScan() {
+  c_open();
+  await delay(0.2);
+  c_preview();
+
+  c_capture();
+  await delay(0.2);
+  c_capture();
 }
