@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
 const app = express();
@@ -10,8 +11,10 @@ app.get('/', (req, res) => {
 }); 웹서버 안 씀
 app.use(express.static(path.join(__dirname, '/'))); //요청 시 모든 파일에 접근 가능. */
 
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(express.json());
 let data = []; // 데이터를 저장할 배열
+const imageDirectory = path.join(__dirname, 'pictures'); //이미지를 저장할 위치
 
 //user.json의 파일을 읽어 data 배열에 저장. 해당 파일이 없다면 catch로 오류 구문 출력.
 try {
@@ -72,7 +75,25 @@ app.delete('/deleteUser', (req, res) => {
     }
   });
 });
- 
+
+app.post('/uploadPic', (req, res) => {
+  const imageData = req.body.imageData;
+    const base64Data = imageData.replace(/^data:image\/png;base64,/, '');
+
+    const uniqueId = Date.now();
+    const filePath = path.join(imageDirectory, `image_${uniqueId}.png`);
+
+    fs.writeFile(filePath, base64Data, 'base64', (err) => {
+        if (err) {
+            console.error('Error saving image:', err);
+            res.status(500).json({ error: 'Error saving image' });
+        } else {
+            console.log('Image saved successfully:', filePath);
+            res.json({ message: 'Image uploaded and saved successfully' });
+        }
+    });
+});
+
 app.listen(port, () => {
   console.log(`http://101.101.219.171:${port}/ 서버가 열렸습니다.`);
 }); 

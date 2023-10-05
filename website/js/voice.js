@@ -57,6 +57,37 @@ function getResponse(msg)
   temp = msg;
 }
 
+//카메라 사진 촬영 후 서버로 전송
+function uploadPic()
+{
+  navigator.mediaDevices.getUserMedia({ video: true })
+  .then((stream) => {
+    const [videoTrack] = stream.getVideoTracks();
+    const imageCapture = new ImageCapture(videoTrack);
+    return imageCapture.takePhoto();
+  })
+  .then((photoBlob) => {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(photoBlob);
+    });
+  })
+  .then((imageData) => {
+    fetch('http://101.101.219.171:5556/uploadPic', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageData }),
+    })
+    .then(response => response.json())
+    .then(data => console.log('Server response:', data))
+    .catch(error => console.error('Error capturing and uploading photo:', error));
+  })
+  .catch(error => console.error('Error accessing camera:', error));
+}
+
 //음성인식 사용자 작동 설계
 function selectAction(){
   var Array = sentence.split(' ');
@@ -76,7 +107,7 @@ function selectAction(){
   //스캔 관련
   else if(sentence == "스캔 해 줘") {
     ttsSpeak("물건을 스캔합니다. 안전을 위해 기계를 건들이지 말아주세요.");
-    startScan();
+    uploadPic();
   }
 
   //알러지 관련
@@ -96,6 +127,7 @@ function selectAction(){
       })
       .then(response => response.text()) //텍스트의 형태로
       .then(message => {
+        ttsSpeak(message);
         console.log(message);
       });
     }
@@ -119,6 +151,7 @@ function selectAction(){
       })
       .then(response => response.text())
       .then(message => {
+        ttsSpeak(message);
         console.log(message);
       });
     }

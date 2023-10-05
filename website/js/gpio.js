@@ -57,6 +57,7 @@ function delay(n) {
   });
 }
 
+/*
 //camera 사용
 function c_open() {
   url = 'luna://com.webos.service.camera2/open';
@@ -107,18 +108,34 @@ function getHandle(msg) {
 function getLog(msg) {
   console.log(msg);
 }
+*/
 
-//서버로 사진 전송
-function sendPic() {
-  
-}
-
-async function startScan() {
-  c_open();
-  await delay(0.2);
-  c_preview();
-
-  c_capture();
-  await delay(0.2);
-  c_capture();
+function uploadPic()
+{
+  navigator.mediaDevices.getUserMedia({ video: true })
+  .then((stream) => {
+    const [videoTrack] = stream.getVideoTracks();
+    const imageCapture = new ImageCapture(videoTrack);
+    return imageCapture.takePhoto();
+  })
+  .then((photoBlob) => {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(photoBlob);
+    });
+  })
+  .then((imageData) => {
+    fetch('http://101.101.219.171:5556/uploadPic', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageData }),
+    })
+    .then(response => response.json())
+    .then(data => console.log('Server response:', data))
+    .catch(error => console.error('Error capturing and uploading photo:', error));
+  })
+  .catch(error => console.error('Error accessing camera:', error));
 }

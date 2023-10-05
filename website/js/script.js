@@ -64,6 +64,7 @@ function iframeSelect(selector)
     "background: url('img/menuHowtocook_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
   else if(selector==5){ // 요리법
+    iframe.src = "html/picture.html";
     imageChange.style = 
     "background: url('img/menuHowtocook_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
