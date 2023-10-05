@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GET 요청</title>
+       // get 요청 하면 post 로 리턴을 받음 기본 코드 변경 예정
+</head>
+<body>
+    <button id="fetchButton">데이터 가져오기</button>
+
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', function() {
+            // 서버 주소와 포트를 포함한 전체 URL을 만듭니다.
+            const serverURL = 'http://106.10.44.20:5555';
+
+            // Fetch API를 사용하여 GET 요청을 보냅니다.
+            fetch(serverURL)
+                .then(function(response) {
+                    return response.text();
+                })
+                .then(function(data) {
+                    console.log(data);
+                })
+                .catch(function(error) {
+                    console.error('오류:', error);
+                });
+        });
+    </script>
+</body>
+</html>
