@@ -1,6 +1,15 @@
 var BridgeVoice = new WebOSServiceBridge();
 var url, params, sentence, temp;
 
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(function (stream) {
+    var video = document.getElementById('video');
+    video.srcObject = stream;
+})
+.catch(function (err) {
+    console.error('Error accessing webcam: ', err);
+});
+
 //음성인식 시작
 function voiceStart() { 
   url = 'luna://com.webos.service.ai.voice/start';
@@ -58,34 +67,24 @@ function getResponse(msg)
 }
 
 //카메라 사진 촬영 후 서버로 전송
-function uploadPic()
-{
-  navigator.mediaDevices.getUserMedia({ video: true })
-  .then((stream) => {
-    const [videoTrack] = stream.getVideoTracks();
-    const imageCapture = new ImageCapture(videoTrack);
-    return imageCapture.takePhoto();
+function uploadPic() {
+  var video = document.getElementById('video');
+  var canvas = document.getElementById('canvas');
+  var context = canvas.getContext('2d');
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  var imageData = canvas.toDataURL('image/png');
+
+  fetch('http://101.101.219.171:5556/uploadPic', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ imageData }),
   })
-  .then((photoBlob) => {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(photoBlob);
-    });
-  })
-  .then((imageData) => {
-    fetch('http://101.101.219.171:5556/uploadPic', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ imageData }),
-    })
-    .then(response => response.json())
-    .then(data => console.log('Server response:', data))
-    .catch(error => console.error('Error capturing and uploading photo:', error));
-  })
-  .catch(error => console.error('Error accessing camera:', error));
+  .then(response => response.json())
+  .then(data => console.log('Server response:', data))
+  .catch(error => console.error('Error capturing and uploading photo:', error));
 }
 
 //음성인식 사용자 작동 설계
@@ -95,10 +94,10 @@ function selectAction(){
   //도움말에 대해 tts 출력
   if(Array[0] == "도움말") {
     if (Array[1] == "스캔") {
-      ttsSpeak("물건을 스캔합니다.");
+      ttsSpeak("물건을 스캔하여 식품명과 유통기한을 확인합니다. 사용법은 '스캔 해 줘'라고 말하여 사용할 수 있습니다.");
     }
     else if (Array[1] == "알러지" || Array[1] == "알레르기") {
-      ttsSpeak("알러지를 등록합니다.");
+      ttsSpeak("알러지를 등록하여 스캔한 식품에 해당 알러지 유발 물질이 들었을 경우 경고합니다. '알러지 등록' 또는 '알러지 정보' 또는 '알러지 삭제' 명령어를 사용하실 수 있습니다.");
     }
     else
       ttsSpeak("'스캔' 또는 '알러지' 명령어를 사용하실 수 있습니다. 자세한 설명은 '도움말 스캔' 또는 '도움말 알러지'를 이용해 들을 수 있습니다");
