@@ -107,6 +107,7 @@ function selectAction(){
   else if(sentence == "스캔 해 줘") {
     ttsSpeak("물건을 스캔합니다. 안전을 위해 기계를 건들이지 말아주세요.");
     uploadPic();
+    gpio_start();
   }
 
   //알러지 관련
@@ -161,4 +162,27 @@ function selectAction(){
   else {
     ttsSpeak("잘못된 명령어 입니다. '도움말'로 사용법을 확인해보세요.");
   }
+}
+
+function gpio_start()//모터 실행 및 카메라(?) open 
+{
+  var url = 'luna://com.webos.service.peripheralmanager/gpio/open';//gpio open
+  var params={
+    "pin":"gpio21"
+  }
+  BridgeGpio.call(url, JSON.stringify(params));
+
+  var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';//outHigh
+  var params={
+    "pin":"gpio21", 
+    "direction":"outHigh"
+  }
+  BridgeGpio.call(url, JSON.stringify(params));
+  delay(1000);
+  var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';//outLow
+  var params={
+    "pin":"gpio21", 
+    "direction":"outLow"
+  }
+  BridgeGpio.call(url, JSON.stringify(params));
 }
