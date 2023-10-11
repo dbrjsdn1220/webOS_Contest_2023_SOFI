@@ -6,7 +6,7 @@ function setVolume(volume)
   var url = 'luna://com.webos.service.audio/master/setVolume';
   var params = {
     "soundOutput": "pcm_output",
-    "volume": volume*10
+    "volume": volume
   };
   bridge.call(url, JSON.stringify(params));
 }
@@ -14,12 +14,16 @@ function setVolume(volume)
 //소리 조절하는 함수
 function volumeControl(number)
 {
-  var volumeImage = document.getElementById("volumeImage"); 
-  if(number > 0){
-    volumeImage.src = "img/nonMute.png";
-  }
-  else if(number == 0){
+  var volumeImage = document.getElementById("volumeImage");
+
+  console.log(volumeImage.src);
+  if(volumeImage.src == "file://app.sofi-webos/media/developer/apps/usr/palm/applications/app.sofi/website/img/nonMute.png") {
     volumeImage.src = "img/mute.png";
+    setVolume(0);
+  }
+  else {
+    volumeImage.src = "img/nonMute.png";
+    setVolume(100);
   }
 
   for(i=1; i<=10; i++){

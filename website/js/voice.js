@@ -20,12 +20,12 @@ function voiceStart() {
   BridgeVoice.call(url, JSON.stringify(params));
 }
 
-//음성인식 종료
+/*음성인식 종료
 function voiceStop() {
   url = 'luna://com.webos.service.ai.voice/stop';
   params = {};
   BridgeVoice.call(url, JSON.stringify(params));
-}
+}*/
 
 //음성인식 응답 값 확인
 function voiceGetResponse() {
@@ -73,18 +73,19 @@ function uploadPic() {
   var context = canvas.getContext('2d');
   context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  var imageData = canvas.toDataURL('image/png');
+  var imageData = canvas.toDataURL('image/jpeg').replace(/^data:image\/jpeg;base64,/, '');
+  console.log(imageData);
 
-  fetch('http://101.101.219.171:5556/uploadPic', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({ imageData }),
+  fetch('http://115.85.182.143:5501/ImgSend', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ data:imageData }),
   })
   .then(response => response.json())
   .then(data => console.log('Server response:', data))
-  .catch(error => console.error('Error capturing and uploading photo:', error));
+  .catch(error => console.error('Error capturing and uploading photo:', error))
 }
 
 //음성인식 사용자 작동 설계

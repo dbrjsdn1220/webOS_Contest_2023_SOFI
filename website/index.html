@@ -7,21 +7,9 @@
 </head>
 
 <body style="background-color: white;">
-  <video id="video" width="612" height="612" autoplay style="display: none;" ></video>
-  <canvas id="canvas" width="612" height="612" style="display: none;"></canvas>
-  
-  <header> <!--상단에 로고랑 음량설정 부분-->
-    <div class="volumeBox" id="volume10" onclick="volumeControl(10)"></div>
-    <div class="volumeBox" id="volume9" onclick="volumeControl(9)"></div>
-    <div class="volumeBox" id="volume8" onclick="volumeControl(8)"></div>
-    <div class="volumeBox" id="volume7" onclick="volumeControl(7)"></div>
-    <div class="volumeBox" id="volume6" onclick="volumeControl(6)"></div>
-    <div class="volumeBox" id="volume5" onclick="volumeControl(5)"></div>
-    <div class="volumeBox" id="volume4" onclick="volumeControl(4)"></div>
-    <div class="volumeBox" id="volume3" onclick="volumeControl(3)"></div>
-    <div class="volumeBox" id="volume2" onclick="volumeControl(2)"></div>
-    <div class="volumeBox" id="volume1" onclick="volumeControl(1)"></div>
-    <img id="volumeImage" src="img/nonMute.png" onclick="volumeControl(0)">
+  <header>
+    <video id="video" width="612" height="612" autoplay style="display: none;" ></video>
+    <canvas id="canvas" width="612" height="612" style="display: none;"></canvas>
   </header>
 
   <section id="menuBar"> <!--좌측에 메뉴선택하는 부분-->
@@ -32,9 +20,10 @@
       <li class="menuType">SETTING</li>
       <li class="menuLink" id="menu2" onclick="iframeSelect(2)">사용자</li>
       <li class="menuType">INFORMATION</li>
-      <li class="menuLink" id="menu3" onclick="iframeSelect(3)">요리법</li>
       <li class="menuLink" id="menu4" onclick="iframeSelect(4)">사용법</li>
+      <li class="menuLink" id="menu3" onclick="iframeSelect(3)">요리법</li>
     </nav>
+    <img id="volumeImage" src="img/nonMute.png" onclick="volumeControl()">
   </section>
   
   <iframe id="iframe"></iframe>
@@ -44,7 +33,6 @@
   <script src="js/voice.js"></script>
   <script>
     window.onload = function() {
-      volumeControl(10); //초기 음량 설정
       iframeSelect(1); //초기 페이지 접속
       voiceStart();
       voiceGetResponse();
