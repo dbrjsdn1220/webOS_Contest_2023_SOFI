@@ -5,6 +5,12 @@ const fs = require('fs');
 const app = express();
 const port = 5556;
 
+function delay(n) {
+  return new Promise(function(resolve){
+      setTimeout(resolve,n*1000);
+  });
+}
+
 /*처음 접속 시, 연결할 사이트
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'start_sofi.html'));
@@ -30,6 +36,8 @@ app.get('/getUser', (req, res) => {
  
 //데이터를 생성
 app.post('/saveUser', (req, res) => {
+    for(let i=0; i<100000000; i++){}
+
     const {name, allergy} = req.body; //html에서 body: JSON.stringify였음. 해당 값을 저장.
     var userID=0;
     
@@ -42,7 +50,7 @@ app.post('/saveUser', (req, res) => {
     }
     const userData = {id: userID, name, allergy};
     data.push(userData); // data 배열에 userData push
- 
+
     fs.writeFile('user.json', JSON.stringify(data, null, 2), (err) => {
         if (err) {
             console.error('데이터 저장 중 오류 발생:', err);

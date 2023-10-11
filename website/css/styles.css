@@ -56,15 +56,11 @@
 }
 #menu3 {
   padding-left: 50px;
-  background: url("../img/menuAllergy_black.png") 5% 50% no-repeat;
+  background: url("../img/menuHowtocook_black.png") 5% 50% no-repeat;
 }
 #menu4 {
   padding-left: 50px;
-  background: url("../img/menuHowtocook_black.png") 5% 50% no-repeat;
-}
-#menu5 {
-  padding-left: 50px;
-  background: url("../img/menuHowtocook_black.png") 5% 50% no-repeat;
+  background: url("../img/menuGuide_black.png") 5% 50% no-repeat;
 }
 
 /* iframe 속성 사이즈 */
@@ -78,7 +74,7 @@ iframe {
 /* html 폴더 안의 모든 파일의 body id */
 #frame {
   border-radius: 20px;
-  border: 1px solid;
+  border: 1px solid rgba(0, 0, 0, .5);
   width: 92%;
   height: 89vh;
   overflow: hidden;

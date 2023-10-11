@@ -40,7 +40,7 @@ function iframeSelect(selector)
 {
   var iframe = document.getElementById("iframe");
   var imageChange = document.getElementById("menu"+selector);
-  var max = 5; // 현재 누를 수 있는 메뉴의 개수
+  var max = 4; // 현재 누를 수 있는 메뉴의 개수
 
   //해당하는 웹페이지로 이동 및 색 변경
   if(selector==1){ // 대시보드
@@ -53,20 +53,15 @@ function iframeSelect(selector)
     imageChange.style = 
     "background: url('img/menuUser_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
-  else if(selector==3){ //GPIO조작 해보려고 만듬
-    iframe.src = "html/gpio.html";
-    imageChange.style = 
-    "background: url('img/menuAllergy_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
-  }
-  else if(selector==4){ // 요리법
+  else if(selector==3){ // 요리법
     iframe.src = "https://www.10000recipe.com";
     imageChange.style = 
     "background: url('img/menuHowtocook_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
-  else if(selector==5){ // 요리법
-    iframe.src = "html/picture.html";
+  else if(selector==4){ // 도움말
+    iframe.src = "html/guide.html";
     imageChange.style = 
-    "background: url('img/menuHowtocook_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
+    "background: url('img/menuGuide_white.png') 5% 50% no-repeat cornflowerBlue; color: white";
   }
 
   for(i=1; i<=max; i++){ //선택되지 않은 메뉴 색 초기화
