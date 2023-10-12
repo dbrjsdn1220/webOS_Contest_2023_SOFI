@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "vendor": "VOID MIAN",
   "type": "web",
-  "main": "website/start_sofi.html",
+  "main": "website/index.html",
   "title": "SOFI",
   "icon": "website/icon.png",
   "allowVideoCapture": true,

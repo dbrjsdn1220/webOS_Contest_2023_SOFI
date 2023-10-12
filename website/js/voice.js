@@ -1,14 +1,6 @@
+var Bridge = new WebOSServiceBridge();
 var BridgeVoice = new WebOSServiceBridge();
 var url, params, sentence, temp;
-
-navigator.mediaDevices.getUserMedia({ video: true })
-.then(function (stream) {
-    var video = document.getElementById('video');
-    video.srcObject = stream;
-})
-.catch(function (err) {
-    console.error('Error accessing webcam: ', err);
-});
 
 //음성인식 시작
 function voiceStart() { 
@@ -19,13 +11,6 @@ function voiceStart() {
   };
   BridgeVoice.call(url, JSON.stringify(params));
 }
-
-/*음성인식 종료
-function voiceStop() {
-  url = 'luna://com.webos.service.ai.voice/stop';
-  params = {};
-  BridgeVoice.call(url, JSON.stringify(params));
-}*/
 
 //음성인식 응답 값 확인
 function voiceGetResponse() {
@@ -44,6 +29,21 @@ function voiceGetResponse() {
   BridgeVoice.call(url, JSON.stringify(params));
 }
 
+//음성인식 응답값
+function getResponse(msg) 
+{
+  console.log(msg);
+  if(msg == `{"state":"recording"}`) {
+    ttsSpeak("말씀하세요")
+  }
+  else if(msg == `{"state":"thinking"}`) {
+    sentence = JSON.parse(temp).response.partial;
+    console.log("sentence", sentence);
+    selectAction();
+  }
+  temp = msg;
+}
+
 //tts 사용
 function ttsSpeak(tts) {
   url = 'luna://com.webos.service.tts/speak';
@@ -54,27 +54,14 @@ function ttsSpeak(tts) {
   BridgeVoice.call(url, JSON.stringify(params));
 }
 
-//음성인식 응답값
-function getResponse(msg) 
-{
-  console.log(msg);
-  if(msg == `{"state":"thinking"}`){
-    sentence = JSON.parse(temp).response.partial;
-    console.log("sentence", sentence);
-    selectAction();
-  }
-  temp = msg;
-}
-
 //카메라 사진 촬영 후 서버로 전송
-function uploadPic() {
+function uploadPic_voice() {
   var video = document.getElementById('video');
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
   context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   var imageData = canvas.toDataURL('image/jpeg').replace(/^data:image\/jpeg;base64,/, '');
-  console.log(imageData);
 
   fetch('http://115.85.182.143:5501/ImgSend', {
     method: 'POST',
@@ -107,7 +94,7 @@ function selectAction(){
   //스캔 관련 명령어!
   else if(sentence == "스캔 해 줘") {
     ttsSpeak("물건을 스캔합니다. 안전을 위해 기계를 건들이지 말아주세요.");
-    uploadPic();
+    uploadPic_voice();
     gpio_start();
   }
 
@@ -115,21 +102,26 @@ function selectAction(){
   else if(Array[0] == "알러지" || Array[0] == "알레르기")
   {
     if(Array[1] == "등록" || Array[1] == "설정") {
+      const allergies = ["난류", "우유", "메밀", "땅콩", "대두", "밀", "고등어", "게", "새우", "돼지고기", "복숭아", "토마토", "아황산류", "호두", "닭고기", "쇠고기", "오징어", "조개류", "잣"];
       const name = Array[2];
       const allergy = Array[3];
       const user = { name, allergy };
 
-      fetch('http://101.101.219.171:5556/saveUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json' //json 형태의 파일을 다룸.
-        },
-        body: JSON.stringify(user)
-      })
-      .then(response => response.text()) //텍스트의 형태로
-      .then(message => {
-        ttsSpeak(message);
-        console.log(message);
+      allergies.forEach(function(value, index, array){
+        if(Array[3] == value){
+          fetch('http://101.101.219.171:5556/saveUser', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json' //json 형태의 파일을 다룸.
+            },
+            body: JSON.stringify(user)
+          })
+          .then(response => response.text()) //텍스트의 형태로
+          .then(message => {
+            ttsSpeak(message);
+            console.log(message);
+          });
+        }
       });
     }
     else if(Array[1] == "정보") {

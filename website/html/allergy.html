@@ -7,14 +7,14 @@
 </head>
  
 <body id=frame>
-  <h1 style="margin-top: -10px;">알레르기 추가</h1>
-  유의사항: 다중 알레르기가 있다면 같은 방식으로 여러 번 진행해주세요.
+  <h2 style="margin: -7px 0px 10px 0px">알레르기 추가등록</h2>
+  다중 알레르기가 있다면 같은 방식으로 여러 번 진행해주세요.
   알레르기가 없는 경우에는 추가하지 않으셔도 됩니다.<br><br>
   <form id="dataForm">
     <label for="name">이름: </label>
-    <input type="text" id="name" name="name" required autocomplete="off"><br>
+    <input style="font-size: 18px" type="text" id="name" name="name" required><br>
     <label for="allergy">알레르기: </label>
-    <select id="allergy" name="allergy" required>
+    <select style="font-size: 20px; margin-top: 5px" id="allergy" name="allergy">
       <option value="없음">없음</option>
       <option value="난류">난류</option>
       <option value="우유">우유</option>
@@ -39,9 +39,9 @@
     <pre><button type="submit" onclick="save()">저장</button></pre>
   </form>
  
-  <h1>알레르기 정보</h1>
+  <h2 style="margin: 50px 0px -10px 0px">목록 및 삭제</h2>
   <ul id="dataList"></ul>
 
-  <script src="../js/user.js"></script>
+  <script src="../js/allergy.js"></script>
 </body>
 </html>
