@@ -1,47 +1,50 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-  <meta charset="UTF-8">
-  <title>HOME</title>
-  <link rel="stylesheet" href="../css/styles.css">
+    <meta charset="UTF-8">
+    <title>HOME</title>
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
- 
+    
 <body id=frame>
-  <h2 style="margin: -7px 0px 10px 0px">알레르기 추가등록</h2>
-  다중 알레르기가 있다면 같은 방식으로 여러 번 진행해주세요.
-  알레르기가 없는 경우에는 추가하지 않으셔도 됩니다.<br><br>
-  <form id="dataForm">
-    <label for="name">이름: </label>
-    <input style="font-size: 18px" type="text" id="name" name="name" required><br>
-    <label for="allergy">알레르기: </label>
-    <select style="font-size: 20px; margin-top: 5px" id="allergy" name="allergy">
-      <option value="없음">없음</option>
-      <option value="난류">난류</option>
-      <option value="우유">우유</option>
-      <option value="메밀">메밀</option>
-      <option value="땅콩">땅콩</option>
-      <option value="대두">대두</option>
-      <option value="밀">밀</option>
-      <option value="고등어">고등어</option>
-      <option value="게">게</option>
-      <option value="새우">새우</option>
-      <option value="돼지고기">돼지고기</option>
-      <option value="복숭아">복숭아</option>
-      <option value="토마토">토마토</option>
-      <option value="아황산류">아황산류</option>
-      <option value="호두">호두</option>
-      <option value="닭고기">닭고기</option>
-      <option value="쇠고기">쇠고기</option>
-      <option value="오징어">오징어</option>
-      <option value="조개류">조개류(굴, 전복, 홍합 포함)</option>
-      <option value="잣">잣</option>
-    </select>
-    <pre><button type="submit" onclick="save()">저장</button></pre>
-  </form>
- 
-  <h2 style="margin: 50px 0px -10px 0px">목록 및 삭제</h2>
-  <ul id="dataList"></ul>
+    <h2 style="margin: -7px 0px 10px 0px">알레르기 추가등록</h2>
+    다중 알레르기가 있다면 같은 방식으로 여러 번 진행해주세요.<br>
+    알레르기가 없는 경우에는 추가하지 않으셔도 됩니다.<br><br>
+    <form id="dataForm">
+        <label for="name">이름: </label>
+        <input style="font-size: 18px" type="text" id="name" name="name" required><br>
+        <label for="allergy">알레르기: </label>
+        <select style="font-size: 20px; margin-top: 5px" id="allergy" name="allergy">
+        <option value="없음">없음</option>
+        <option value="난류">난류</option>
+        <option value="우유">우유</option>
+        <option value="메밀">메밀</option>
+        <option value="땅콩">땅콩</option>
+        <option value="대두">대두</option>
+        <option value="밀">밀</option>
+        <option value="고등어">고등어</option>
+        <option value="게">게</option>
+        <option value="새우">새우</option>
+        <option value="돼지고기">돼지고기</option>
+        <option value="복숭아">복숭아</option>
+        <option value="토마토">토마토</option>
+        <option value="아황산류">아황산류</option>
+        <option value="호두">호두</option>
+        <option value="닭고기">닭고기</option>
+        <option value="쇠고기">쇠고기</option>
+        <option value="오징어">오징어</option>
+        <option value="조개류">조개류(굴, 전복, 홍합 포함)</option>
+        <option value="잣">잣</option>
+        </select>
+        <pre><button type="submit" onclick="save()">저장</button></pre>
+    </form>
+    
+    <h2 style="margin: 50px 0px -10px 0px">목록 및 삭제</h2>
+    <ul id="dataList"></ul>
 
-  <script src="../js/allergy.js"></script>
+    <script src="../js/allergy.js"></script>
+    <script>
+        window.onload = fetchData();
+    </script>
 </body>
 </html>
