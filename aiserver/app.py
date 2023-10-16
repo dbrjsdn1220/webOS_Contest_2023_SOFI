@@ -3,12 +3,6 @@ from flask import Flask, request, jsonify
 import Img_Proc as ip
 import json
 
-try:
-    with open('user.json', 'r') as file:
-        data = json.load(file)
-except FileNotFoundError:
-    print("user.json 파일을 찾을 수 없습니다.")
-
 app = Flask(__name__)
 @app.route('/ImgReceive', methods=['GET', 'POST'])
 def send_image():
@@ -34,6 +28,7 @@ def receive_image():
 
 @app.route('/getUser', methods=['POST', 'GET'])
 def get_user():
+    data = file_load()
     return jsonify(data)
 
 
@@ -41,7 +36,7 @@ def get_user():
 def save_user():
     name = request.json['name']
     allergy = request.json['allergy']
-
+    data = file_load()
     user_id = 0
     while any(user['id'] == user_id for user in data):
         user_id += 1
@@ -58,6 +53,7 @@ def save_user():
 @app.route('/deleteUser', methods=['POST','GET'])
 def delete_user():
     user_id = request.json['id']
+    data = file_load()
     for i, user in enumerate(data):
         if user['id'] == user_id:
             del data[i]
@@ -68,6 +64,12 @@ def delete_user():
 
     return 'Data has been successfully deleted.', 200
 
-
+def file_load():
+    try:
+        with open('user.json', 'r') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        print("user.json 파일을 찾을 수 없습니다.")
+    return data
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5501, debug=True)
