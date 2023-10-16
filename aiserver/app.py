@@ -1,74 +1,73 @@
 from flask import Flask, request, jsonify
-from PIL import Image
-from io import BytesIO
-from ultralytics import YOLO
-from roboflow import Roboflow
-import cv2
+
+import Img_Proc as ip
 import json
-import time
-import base64
-import numpy as np
 
-global model
-model = YOLO('hbest.pt')
-
+try:
+    with open('user.json', 'r') as file:
+        data = json.load(file)
+except FileNotFoundError:
+    print("user.json 파일을 찾을 수 없습니다.")
 
 app = Flask(__name__)
-
-@app.route('/timeout', methods=['POST'])
-def timeout():
-    time.sleep(120)
-    return 0
+@app.route('/ImgReceive', methods=['GET', 'POST'])
+def send_image():
+    data = ip.send_food_data()
+    return data
 
 @app.route('/ImgSend', methods=['POST'])
 def receive_image():
     try:
         data = request.get_json()
         image_data = data.get('data')
-        img = save_image(image_data)
-        if len(img) < 1:
-            return jsonify({'status': 'error'})
-        result = yolo_image(img)
-        return jsonify({'status': 'success', 'food': '마가렛트', 'allergy':['우유', '밀'], 'date':'2024-01-01', 'data': str(image)})
+        img, img_path = ip.save_image(image_data)
+        if img == 'no_data':
+            return jsonify({'status':'error'})
+        fo_na = ip.barcode_decode(img_path)
+        allergy_date = ip.read_text(img_path)
+        ip.food_save(fo_na, allergy_date[0], allergy_date[1])
+        print('0000000000')
+        return jsonify({'status':'success'})
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        print(e)
+        return jsonify({'status':'error'})
 
-def save_image(encoded_image):
-    try:
-        print(1)
-        image_data = BytesIO(bytes(encoded_image, 'utf-8'))
-        print(2)
-        image = Image.open(BytesIO(base64.b64decode(encoded_image)))
-        image = np.array(image)
-        return image
-    except Exception as e:
-        print(f"Error saving image: {e}")
-        return
+@app.route('/getUser', methods=['POST', 'GET'])
+def get_user():
+    return jsonify(data)
 
-def yolo_image(image):
-    rf = Roboflow(api_key="vwQrRvQCJlM3BM1mOiVX")
-    project = rf.workspace().project("br_date")
-    model = project.version(1).model
-    scan_img = model.predict("/Users/hanva/br_date1-1/test/images/29KB1GMYLM_2.jpg", confidence=40, overlap=30).json()
-    if len(scan_img['predictions']) == 0:
-        return 0
-    scan_img = scan_img['predictions'][0]
-    if scan_img['class'] == '1' or scan_img['class'] == '2' or scan_img['class'] == '3':
-        date = date_scan()
-    if scan_img['class'] == '0':
-        barcode = barcode_scan()
-def date_scan():
 
-def barcode_scan():
+@app.route('/saveUser', methods=['POST','GET'])
+def save_user():
+    name = request.json['name']
+    allergy = request.json['allergy']
 
-def resize_img(image):
-    image = cv2.resize(image, dsize=(640,640))
-    resize_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    resize_image = cv2.adaptiveThreshold(resize_image, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
-    resize_image = cv2.GaussianBlur(resize_image, (0,0), 1)
-    i = []
-    i.append(image)
-    i.append(resize_image)
-    return i
+    user_id = 0
+    while any(user['id'] == user_id for user in data):
+        user_id += 1
+
+    user_data = {'id': user_id, 'name': name, 'allergy': allergy}
+    data.append(user_data)
+
+    with open('user.json', 'w') as file:
+        json.dump(data, file, indent=2)
+
+    return 'Data has been successfully saved.', 200
+
+# Delete data
+@app.route('/deleteUser', methods=['POST','GET'])
+def delete_user():
+    user_id = request.json['id']
+    for i, user in enumerate(data):
+        if user['id'] == user_id:
+            del data[i]
+            break
+
+    with open('user.json', 'w') as file:
+        json.dump(data, file, indent=2)
+
+    return 'Data has been successfully deleted.', 200
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5501)
+    app.run(host='0.0.0.0', port=5501, debug=True)
