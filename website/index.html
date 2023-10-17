@@ -7,12 +7,14 @@
 </head>
 
 <body style="background-color: white;">
+    <!--카메라 사용하기 위한 태그 추가-->
     <header>
-        <video id="video" width="612" height="612" autoplay style="display: none;" ></video>
-        <canvas id="canvas" width="612" height="612" style="display: none;"></canvas>
+        <video id="video" width="1280" height="720" style="display: none" autoplay></video>
+        <canvas id="canvas" width="960" height="720" style="display: none"></canvas>
     </header>
 
-    <section id="menuBar"> <!--좌측에 메뉴선택하는 부분-->
+    <!--좌측에 메뉴선택하는 부분-->
+    <section id="menuBar">
         <img src="img/sofi.png" id="logo">
         <nav>
         <li class="menuType">HOME</li>
@@ -24,11 +26,13 @@
         <li class="menuLink" id="menu4" onclick="iframeSelect(4)">사용법</li>
         </nav>
         <img id="volumeImage" src="img/mute.png" onclick="volumeControl()">
-        <img id="cameraImage" src="img/camera.png" onclick="gpio_main()">
+        <img id="cameraImage" src="img/camera.png" onclick="showConfirm()">
     </section>
     
+    <!--iframe 부분-->
     <iframe id="iframe"></iframe>
 
+    <!--팝업창 구현-->
     <div class="popupContainer" id="confirm">
         <div class="popup">
             <h2>스캔하시겠습니까?</h2>
@@ -38,8 +42,8 @@
     </div>
     <div class="popupContainer" id="scanning">
         <div class="popup">
-        <h1 id="scanLoading">스캔 중</h1>
-        <p>잠시만 기다려 주십시오.</p>
+            <h1 id="scanLoading">스캔 중</h1>
+            <p>잠시만 기다려 주십시오.</p>
         </div>
     </div>
 

@@ -1,6 +1,6 @@
 var BridgeVoice = new WebOSServiceBridge();
+var BridgeGpio = new WebOSServiceBridge();
 var url, params, sentence, temp;
-
 
 //음성인식 시작
 function voiceStart() { 
@@ -73,6 +73,7 @@ function uploadPic_voice() {
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     var imageData = canvas.toDataURL('image/jpeg').replace(/^data:image\/jpeg;base64,/, '');
+    console.log(imageData);
 
     fetch('http://115.85.182.143:5501/ImgSend', {
         method: 'POST',
@@ -85,7 +86,19 @@ function uploadPic_voice() {
     .then(data => console.log('Server response:', data))
     .catch(error => console.error('Error capturing and uploading photo:', error))
 }
-
+//AI 사진 처리 후 저장된 데이터 받기
+function getImageData_voice() {
+    let foodData = ""
+    fetch('http://115.85.182.143:5501/imageReceive')
+    .then(response => response.json())
+    .then(data => {
+        foodData = data;
+        console.log(foodData);
+    })
+    .catch(error => {
+        console.error(error)
+    });
+}
 /*모터 실행 및 카메라(?) open
 function gpio_start() 
 {
@@ -108,8 +121,7 @@ function gpio_start()
         "direction":"outLow"
     }
     BridgeGpio.call(url, JSON.stringify(params));
-}
-*/
+}*/
 
 //음성인식 사용자 작동 설계
 function selectAction(){
@@ -118,7 +130,9 @@ function selectAction(){
     //도움말 관련 명령어!
     if(Array[0] == "도움말") {
         if (Array[1] == "스캔") {
-        ttsSpeak("물건을 스캔하여 식품명과 유통기한을 확인합니다. 명령어는 '스캔 해 줘' 입니다.");
+        ttsSpeak(
+            `물건을 스캔하여 식품명과 유통기한을 확인합니다. 명령어는 '스캔 해 줘' 입니다.
+            '스캔 정보' 명령어를 사용하면 가장 최근에 스캔한 3개의 음식 정보를 음성으로 안내합니다.`);
         }
         else if (Array[1] == "알러지" || Array[1] == "알레르기") {
         ttsSpeak(
@@ -138,7 +152,7 @@ function selectAction(){
         }
         else
         ttsSpeak(
-            `'스캔' 또는 '알레르기'와 관련된 명령어를 사용하실 수 있습니다. 자세한 설명은 '도움말 스캔',
+            `'스캔', '알레르기', '음량'과 관련된 명령어를 사용하실 수 있습니다. 자세한 설명은 '도움말 스캔',
             '도움말 알레르기', '도움말 음량'을 이용해 들을 수 있습니다"`
         );
     }
@@ -147,6 +161,23 @@ function selectAction(){
     else if(sentence == "스캔 해 줘") {
         ttsSpeak("물건을 스캔합니다. 안전을 위해 기계를 건들이지 말아주세요.");
         uploadPic_voice();
+        //gpio_start();
+    }
+    else if(sentence == "스캔 정보") {
+        fetch('http://115.85.182.143:5501/getFood')
+        .then(response => response.json())
+        .then(data => {
+            let dataLength = Object.keys(data).length;
+            for(let i=dataLength-1; i!=dataLength-4; i--) {
+                if (dataLength-i>=0) {
+                    ttsSpeak(
+                        `'식품명': ${data[i].name}, '유통기한': ${data[i].date},
+                        '알레르기 유발 식품': ${data[i].allergy}, '스캔 날짜': ${data[i].time}`
+                    );
+                }
+                else { break; }
+            }
+        });
     }
 
     //음량 조절 명령어!
@@ -172,7 +203,7 @@ function selectAction(){
         //등록 가능한 알레르기 식품인지 확인
         for(let i in allergies) {
             if(Array[3] == allergies[i]){
-            fetch('http://101.101.219.171:5556/saveUser', {
+            fetch('http://115.85.182.143:5501/saveUser', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json'
@@ -193,7 +224,7 @@ function selectAction(){
         }
 
         else if(Array[1] == "정보") {
-        fetch('http://101.101.219.171:5556/getUser')
+        fetch('http://115.85.182.143:5501/getUser')
         .then(response => response.json())
         .then(data => {
             data.forEach(user => {
@@ -203,7 +234,7 @@ function selectAction(){
         }
         else if(Array[1] == "삭제") {
         const id = Array[2].substring(0, 1);
-        fetch(`http://101.101.219.171:5556/deleteUser`, {
+        fetch(`http://115.85.182.143:5501/deleteUser`, {
         method: 'DELETE',
         headers: {
             "Content-Type": "application/json"

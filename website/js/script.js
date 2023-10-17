@@ -1,8 +1,11 @@
 var bridge = new WebOSServiceBridge();
 const popupConfirm = document.getElementById('confirm');
 const popupScanning = document.getElementById('scanning');
+const popupSpecific = document.getElementById('specific');
 const scanLoading = document.getElementById('scanLoading');
-var data = "";
+const dataDetail = document.getElementById('dataDetail');
+var dataLength = 0;
+var number = 0;
 
 navigator.mediaDevices.getUserMedia({ video: true })
 .then(function (stream) {
@@ -80,6 +83,64 @@ function iframeSelect(selector) {
     }
 }
 
+/*스캔 기록에 대한 함수들*/
+//스캔 데이터 화면에 출력
+function dataLoad() {
+    let num = document.getElementById('num');
+    num.textContent = `${number+1} Page`;
+
+    fetch('http://115.85.182.143:5501/getFood')
+    .then(response => response.json())
+    .then(data => {
+        dataLength = Object.keys(data).length;
+        const scanList = document.getElementById('scanList');
+        scanList.innerHTML = ''; // 기존 목록 초기화
+        for(let i=dataLength-number*10; i!=dataLength-number*10-10; i--) {
+            if (i>0) {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <button onclick="specificData(${data[i-1].id})">${data[i-1].id+1}</button>
+                    &#160&#160${data[i-1].name} &#160/&#160 ${data[i-1].date}`;
+                scanList.appendChild(listItem); //변수 각각의 값을 dataList에 추가
+            }
+            else { break; }
+        }
+    })
+    .catch(error => {
+        console.error('오류 발생:', error);
+    });
+}
+//다음 페이지 이동
+function nextPage() {
+    if (number+1 < dataLength/10)
+    number++;
+    dataLoad();
+}
+//이전 페이지 이동
+function prevPage() {
+    if (number > 0)
+        number--;
+    dataLoad();
+}
+//상세 정보 보기
+function specificData(num) {
+    popupSpecific.style.display = 'flex';
+    fetch('http://115.85.182.143:5501/getFood')
+    .then(response => response.json())
+    .then(data => {
+        dataDetail.innerHTML = `<br>
+        식품명: ${data[num].name}<br><br>유통기한: ${data[num].date}<br><br>
+        알레르기 유발 식품: <br>${data[num].allergy}<br><br>스캔 날짜: ${data[num].time}
+        <br><br><button onclick="hideDetail()">닫기</button>`;
+    });
+}
+//팝업창 닫기(dashboard.html)
+function hideDetail() {
+    popupSpecific.style.display = 'none';
+}
+
+
+/*사진 관련 함수들*/
 //카메라 사진 촬영 후 서버로 전송
 function uploadPic_button() {
     var video = document.getElementById('video');
@@ -98,40 +159,50 @@ function uploadPic_button() {
     })
     .then(response => response.json())
     .then(data => console.log('Server response:', data))
-    .catch(error => console.error('Error capturing and uploading photo:', error))
+    .catch(error => console.error('Error uploading photo:', error))
 }
-
+//AI 사진 처리 후 저장된 데이터 받기
+function getImageData_button() {
+    let foodData = ""
+    fetch('http://115.85.182.143:5501/imageReceive')
+    .then(response => response.json())
+    .then(data => {
+        foodData = data;
+        console.log(foodData);
+    })
+    .catch(error => {
+        console.error(error)
+    });
+}
+//카메라 눌렀을 때 스캔 확인 창(오클릭 방지)
 function showConfirm() {
     popupConfirm.style.display = 'flex';
 }
+//팝업창 닫기(index.html)
 function hidePopup() {
     popupConfirm.style.display = 'none';
     popupScanning.style.display = 'none';
 }
-//로딩 중에 ux추가
-async function waitResult(){
+//AI가 사진을 처리하는 중에 보이는 ux추가
+async function waitResult() {
+    foodData = "";
     while(1){
         await sleep(1);
         if(scanLoading.textContent != "스캔 중...")
-        scanLoading.textContent += ".";
+            scanLoading.textContent += ".";
         else {
-        scanLoading.textContent = "스캔 중"
-
-        /*추후 여기에 서버로부터 데이터 받아서 data에 저장하는 fetch API 써야 함*/
-        
-        if(data != "")
-            break;
+            scanLoading.textContent = "스캔 중"
+            getImageData_button();
         }
     }
 }
-
+//스캔 확인 창에서 선택한 값에 따른 작동 (네 / 아니오)
 async function confirmScan(bool) {
     if (bool) {
         hidePopup();
         popupScanning.style.display = 'flex';
         uploadPic_button();
         await waitResult();
-        hidePopup();
     } 
     else {
         hidePopup();
