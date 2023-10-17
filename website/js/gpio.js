@@ -1,32 +1,113 @@
 var BridgeGpio = new WebOSServiceBridge();
-var url, params, handle;
+var Bridge=new WebOSServiceBridge();
+var Bridgecam=new WebOSServiceBridge();
+var url, params, handle, url2, url3;
+var num;
 
-/*
-function gpio_test()
+
+async function gpio_main(){
+  await start_cam();
+  console.log("사진 완료");
+  await delay(50);
+  await gpio_test();
+  console.log("돌기완료");
+  await delay(100);
+  await start_cam();
+  console.log("사진완료");
+  await delay(70);
+  await gpio_test();
+  console.log("돌기완료");
+  await delay(120);
+  await start_cam();
+  console.log("사진완료");
+  await delay(100);
+  console.log("종료 끝~!");
+}
+
+
+async function gpio_test()
 {
+  var url2 = 'luna://com.webos.service.peripheralmanager/gpio/open';
+  var params={
+    "pin":"gpio20"
+  }
+  await BridgeGpio.call(url2, JSON.stringify(params));
+  var url2 = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
+  var params={
+    "pin":"gpio20", 
+    "direction":"in"
+  }
+  await BridgeGpio.call(url2, JSON.stringify(params));
+  await console.log("체크 됨");
   var url = 'luna://com.webos.service.peripheralmanager/gpio/open';
   var params={
     "pin":"gpio21"
   }
-  BridgeGpio.call(url, JSON.stringify(params));
-
-   
+  await BridgeGpio.call(url, JSON.stringify(params));
   var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
   var params={
     "pin":"gpio21", 
     "direction":"outHigh"
   }
-  BridgeGpio.call(url, JSON.stringify(params));
-  delay(10);
+  await BridgeGpio.call(url, JSON.stringify(params));
   var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
   var params={
     "pin":"gpio21", 
     "direction":"outLow"
   }
-  BridgeGpio.call(url, JSON.stringify(params));
+  await BridgeGpio.call(url, JSON.stringify(params));
+  handle="low";
+  while(handle=="low")
+  {
+    var url2 = 'luna://com.webos.service.peripheralmanager/gpio/getValue';
+    var params={
+       "pin":"gpio20" 
+    }
+    await console.log("체크 됨1");
+    await delay(5);
+    await Bridge.call(url2, JSON.stringify(params));
+    Bridge.onservicecallback = getHandle;
+  } 
+  handle="low";
+}
+
+function getHandle(msg){
+  handle = JSON.parse(msg).value;
+  console.log(handle);
+}
+
+async function delay(n) {
+  return new Promise(function(resolve){
+      setTimeout(resolve,n*100);
+  });
+}
+
+async function start_cam(){
+  console.log("카메라 시작");
+  var url3 = 'luna://com.webos.service.peripheralmanager/gpio/open';
+  var params={
+    "pin":"gpio12"
+  }
+  Bridgecam.call(url3, JSON.stringify(params));
+  var url3 = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
+  var params={
+    "pin":"gpio12", 
+    "direction":"outHigh"
+  }
+  Bridgecam.call(url3, JSON.stringify(params));
+  await delay(10);
+  var url3 = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
+  var params={
+    "pin":"gpio12", 
+    "direction":"outLow"
+  }
+  Bridgecam.call(url3, JSON.stringify(params));
+  await delay(15);
+  console.log("완료");
 }
 
 
+/*
 function hasGetUserMedia()
 {
   return !!(navigator.GetUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
@@ -49,13 +130,6 @@ function hasGetUserMedia()
     });
   }
  */
-
-//딜레이 n은 s단위
-function delay(n) {
-  return new Promise(function(resolve){
-      setTimeout(resolve,n*1000);
-  });
-}
 
 /*
 //camera 사용
