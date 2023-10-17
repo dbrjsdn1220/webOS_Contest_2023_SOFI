@@ -1,6 +1,5 @@
 var BridgeVoice = new WebOSServiceBridge();
 var url, params, sentence, temp;
-const { gpio_main } = require('./gpio');
 
 
 //음성인식 시작
@@ -113,7 +112,7 @@ function gpio_start()
 */
 
 //음성인식 사용자 작동 설계
-async function selectAction(){
+function selectAction(){
     let Array = sentence.split(' ');
     
     //도움말 관련 명령어!
@@ -148,7 +147,6 @@ async function selectAction(){
     else if(sentence == "스캔 해 줘") {
         ttsSpeak("물건을 스캔합니다. 안전을 위해 기계를 건들이지 말아주세요.");
         uploadPic_voice();
-        await gpio_main();
     }
 
     //음량 조절 명령어!
