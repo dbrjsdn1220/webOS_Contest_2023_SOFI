@@ -1,5 +1,7 @@
 var BridgeVoice = new WebOSServiceBridge();
 var url, params, sentence, temp;
+const { gpio_main } = require('./gpio');
+
 
 //음성인식 시작
 function voiceStart() { 
@@ -85,7 +87,7 @@ function uploadPic_voice() {
     .catch(error => console.error('Error capturing and uploading photo:', error))
 }
 
-//모터 실행 및 카메라(?) open
+/*모터 실행 및 카메라(?) open
 function gpio_start() 
 {
     var url = 'luna://com.webos.service.peripheralmanager/gpio/open';//gpio open
@@ -108,9 +110,10 @@ function gpio_start()
     }
     BridgeGpio.call(url, JSON.stringify(params));
 }
+*/
 
 //음성인식 사용자 작동 설계
-function selectAction(){
+async function selectAction(){
     let Array = sentence.split(' ');
     
     //도움말 관련 명령어!
@@ -145,7 +148,7 @@ function selectAction(){
     else if(sentence == "스캔 해 줘") {
         ttsSpeak("물건을 스캔합니다. 안전을 위해 기계를 건들이지 말아주세요.");
         uploadPic_voice();
-        gpio_start();
+        await gpio_main();
     }
 
     //음량 조절 명령어!
