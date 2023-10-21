@@ -158,7 +158,7 @@ async function waitResult() {
             scanLoading.textContent += ".";
         else {
             scanLoading.textContent = "스캔 중"
-            getImageData_button();
+            getImageData();
             if(foodData!="") { break; }
         }
     }
@@ -168,8 +168,10 @@ async function confirmScan(bool) {
     if (bool) {
         hidePopup();
         popupScanning.style.display = 'flex';
-        uploadPic_button();
+        await gpio_mains();
         await waitResult();
+        hidePopup();
+        compareAllergy();
     } 
     else {
         hidePopup();
