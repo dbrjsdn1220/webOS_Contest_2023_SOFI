@@ -1,7 +1,7 @@
 var BridgeGpio = new WebOSServiceBridge();
 var Bridge=new WebOSServiceBridge();
 var Bridgecam=new WebOSServiceBridge();
-var url, params, handle, url2, url3;
+var url, params, handle, url2, url3, url4;
 var num;
 
 
@@ -88,20 +88,38 @@ async function start_cam(){
   var params={
     "pin":"gpio12"
   }
-  Bridgecam.call(url3, JSON.stringify(params));
+  Bridgecam.call(url4, JSON.stringify(params));
+  console.log("카메라 시작 2");
+  var url4 = 'luna://com.webos.service.peripheralmanager/gpio/open';
+  var params={
+    "pin":"gpio16"
+  }
+  Bridgecam.call(url4, JSON.stringify(params));
   var url3 = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
   var params={
     "pin":"gpio12", 
     "direction":"outHigh"
   }
-  Bridgecam.call(url3, JSON.stringify(params));
+  Bridgecam.call(url4, JSON.stringify(params));
+  var url4 = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
+  var params={
+    "pin":"gpio16", 
+    "direction":"outHigh"
+  }
+  Bridgecam.call(url4, JSON.stringify(params));
   await delay(10);
   var url3 = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
   var params={
     "pin":"gpio12", 
     "direction":"outLow"
   }
-  Bridgecam.call(url3, JSON.stringify(params));
+  Bridgecam.call(url4, JSON.stringify(params));
+  var url4 = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
+  var params={
+    "pin":"gpio16", 
+    "direction":"outLow"
+  }
+  Bridgecam.call(url4, JSON.stringify(params));
   await delay(15);
   console.log("완료");
 }
