@@ -85,31 +85,6 @@ async function uploadPic_voice() {
     .catch(error => console.error('Error capturing and uploading photo:', error))
 }
 
-/*모터 실행 및 카메라(?) open
-function gpio_start() 
-{
-    var url = 'luna://com.webos.service.peripheralmanager/gpio/open';//gpio open
-    var params={
-        "pin":"gpio21"
-    }
-    BridgeGpio.call(url, JSON.stringify(params));
-
-    var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';//outHigh
-    var params={
-        "pin":"gpio21", 
-        "direction":"outHigh"
-    }
-    BridgeGpio.call(url, JSON.stringify(params));
-    delay(1000);
-    var url = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';//outLow
-    var params={
-        "pin":"gpio21", 
-        "direction":"outLow"
-    }
-    BridgeGpio.call(url, JSON.stringify(params));
-}
-*/
-
 //음성인식 사용자 작동 설계
 async function selectAction(){
     let Array = sentence.split(' ');
