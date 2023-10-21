@@ -88,7 +88,13 @@ async function start_cam(){
   var params={
     "pin":"gpio12"
   }
-  Bridgecam.call(url3, JSON.stringify(params));
+  Bridgecam.call(url4, JSON.stringify(params));
+  console.log("카메라 시작 2");
+  var url4 = 'luna://com.webos.service.peripheralmanager/gpio/open';
+  var params={
+    "pin":"gpio16"
+  }
+  Bridgecam.call(url4, JSON.stringify(params));
   var url3 = 'luna://com.webos.service.peripheralmanager/gpio/setDirection';
   var params={
     "pin":"gpio12", 
