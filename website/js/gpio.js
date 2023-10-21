@@ -59,6 +59,8 @@ async function gpio_test()
     "direction":"outLow"
   }
   await BridgeGpio.call(url, JSON.stringify(params));
+  await delay(50);
+  /*
   handle="low";
   while(handle=="low")
   {
@@ -72,6 +74,7 @@ async function gpio_test()
     Bridge.onservicecallback = getHandle;
   } 
   handle="low";
+  */
 }
 
 function getHandle(msg){

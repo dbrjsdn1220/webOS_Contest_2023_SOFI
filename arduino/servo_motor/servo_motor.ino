@@ -8,12 +8,9 @@ void setup() {
   digitalWrite(12, HIGH);
   //회로 연결 상태에 따라 LOW가 전진일지 HIGH가 전진인지 정해준다
   pinMode(7, INPUT);//라즈베리로 부터 받는 gpio
+  digitalWrite(7, LOW);
   pinMode(6, OUTPUT);//돌아간 후 라즈베리에 입력
   digitalWrite(6, LOW);
-  pinMode(2, OUTPUT);
-  digitalWrite(2, LOW);
-  pinMode(1, OUTPUT);
-  digitalWrite(1, HIGH);
 }
 
 void loop() {
@@ -22,11 +19,9 @@ void loop() {
   {
     sub_moter();
     digitalWrite(6, HIGH);
-    digitalWrite(2, HIGH);
     delay(500);
-    digitalWrite(2, LOW);
+    digitalWrite(6, LOW);
   }
-  digitalWrite(6, LOW);
 }
 
 void sub_moter()
