@@ -7,18 +7,21 @@ var num;
 
 async function gpio_mains(){
   await start_cam();
+  await uploadPic_voice();
   console.log("사진 완료");
   await delay(50);
   await gpio_test();
   console.log("돌기완료");
   await delay(100);
   await start_cam();
+  await uploadPic_voice();
   console.log("사진완료");
   await delay(70);
   await gpio_test();
   console.log("돌기완료");
   await delay(120);
   await start_cam();
+  await uploadPic_voice();
   console.log("사진완료");
   await delay(100);
   console.log("종료 끝~!");
