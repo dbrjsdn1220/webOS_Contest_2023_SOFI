@@ -9,8 +9,8 @@
 <body style="background-color: white;">
     <!--카메라 사용하기 위한 태그 추가-->
     <header>
-        <video id="video" width="1280" height="720" style="display: none" autoplay></video>
-        <canvas id="canvas" width="960" height="720" style="display: none"></canvas>
+        <video id="video" width="720" height="640" style="display: none" autoplay></video>
+        <canvas id="canvas" width="720" height="640" style="display: none"></canvas>
     </header>
 
     <!--좌측에 메뉴선택하는 부분-->
@@ -25,8 +25,8 @@
         <li class="menuLink" id="menu3" onclick="iframeSelect(3)">요리법</li>
         <li class="menuLink" id="menu4" onclick="iframeSelect(4)">사용법</li>
         </nav>
-        <img id="volumeImage" src="img/mute.png" onclick="volumeControl()">
-        <img id="cameraImage" src="img/camera.png" onclick="showConfirm()">
+        <img id="volumeImage" src="img/mute.png" onclick="volumeControl()"> <!--onclick="volumeControl()"-->
+        <img id="cameraImage" src="img/camera.png" onclick="confirmScan()"> <!--onclick="showConfirm()"-->
     </section>
     
     <!--iframe 부분-->

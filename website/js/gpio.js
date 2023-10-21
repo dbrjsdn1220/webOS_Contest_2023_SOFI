@@ -5,7 +5,7 @@ var url, params, handle, url2, url3;
 var num;
 
 
-async function gpio_main(){
+async function gpio_mains(){
   await start_cam();
   console.log("사진 완료");
   await delay(50);

@@ -4,6 +4,7 @@ const popupScanning = document.getElementById('scanning');
 const popupSpecific = document.getElementById('specific');
 const scanLoading = document.getElementById('scanLoading');
 const dataDetail = document.getElementById('dataDetail');
+var foodData;
 var dataLength = 0;
 var number = 0;
 
@@ -139,41 +140,6 @@ function hideDetail() {
     popupSpecific.style.display = 'none';
 }
 
-
-/*사진 관련 함수들*/
-//카메라 사진 촬영 후 서버로 전송
-function uploadPic_button() {
-    var video = document.getElementById('video');
-    var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    var imageData = canvas.toDataURL('image/jpeg').replace(/^data:image\/jpeg;base64,/, '');
-
-    fetch('http://115.85.182.143:5501/ImgSend', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ data:imageData }),
-    })
-    .then(response => response.json())
-    .then(data => console.log('Server response:', data))
-    .catch(error => console.error('Error uploading photo:', error))
-}
-//AI 사진 처리 후 저장된 데이터 받기
-function getImageData_button() {
-    let foodData = ""
-    fetch('http://115.85.182.143:5501/imageReceive')
-    .then(response => response.json())
-    .then(data => {
-        foodData = data;
-        console.log(foodData);
-    })
-    .catch(error => {
-        console.error(error)
-    });
-}
 //카메라 눌렀을 때 스캔 확인 창(오클릭 방지)
 function showConfirm() {
     popupConfirm.style.display = 'flex';
@@ -193,6 +159,7 @@ async function waitResult() {
         else {
             scanLoading.textContent = "스캔 중"
             getImageData_button();
+            if(foodData!="") { break; }
         }
     }
 }
@@ -207,4 +174,60 @@ async function confirmScan(bool) {
     else {
         hidePopup();
     }
+}
+
+//카메라 사진 촬영 후 서버로 전송
+function uploadPic() {
+    var video = document.getElementById('video');
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    var imageData = canvas.toDataURL('image/jpeg').replace(/^data:image\/jpeg;base64,/, '');
+    console.log(imageData);
+
+    fetch('http://115.85.182.143:5501/ImgSend', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data:imageData }),
+    })
+    .then(response => response.json())
+    .then(data => console.log('Server response:', data))
+    .catch(error => console.error('Error capturing and uploading photo:', error))
+}
+
+//AI 사진 처리 후 저장된 데이터 받기
+function getImageData() {
+    foodData = ""
+    fetch('http://115.85.182.143:5501/ImgReceive')
+    .then(response => response.json())
+    .then(data => {
+        foodData = data;
+        console.log(foodData);
+        ttsSpeak(`"식품명은" ${foodData.name}, 유통기한은 ${foodData.date}까지 입니다.`);
+    })
+    .catch(error => {
+        console.error(error)
+    });
+}
+
+// 스캔한 음식의 알레르기 식품과 사용자의 알레르기를 비교하기 위해 서버에서 사용자 알레르기 정보 호출
+function compareAllergy() {
+    fetch('http://115.85.182.143:5501/getUser')
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(user => {
+            foodData.allergy.forEach(allergy => {
+                if(user.allergy == allergy) {
+                    ttsSpeak(`해당 식품 ${foodData.name}에 ${user.name}님의 알레르기 유발식품인 
+                    ${allergy}, 함유되어 있습니다. 섭취에 주의 바랍니다.`);
+                }
+            });
+        });
+    })
+    .catch(error => {
+        console.error('오류 발생:', error);
+    });
 }
