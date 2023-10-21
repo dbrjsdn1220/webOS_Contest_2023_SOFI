@@ -7,6 +7,7 @@ import requests
 import uuid
 import json
 import cv2
+import app
 
 global f_n
 global allergy
@@ -20,7 +21,6 @@ def save_image(encoded_image):
     try:
         image_data = BytesIO(bytes(encoded_image, 'utf-8'))
         image = Image.open(BytesIO(base64.b64decode(encoded_image)))
-        image = image.resize((620, 620))
         t = time.localtime(time.time())
         img_time = str(t.tm_year) + '_' + str(t.tm_mon) + '_' + str(t.tm_mday) + '-' + str(t.tm_hour) + '_' + str(
             t.tm_min) + '_' + str(t.tm_sec)
@@ -90,11 +90,19 @@ def read_text(img_path):
         response = json.loads(response.text.encode('utf-8'))
         allergy = allergy_check(response)
         date = date_check(response)
+        display(response)
     except Exception as e:
         print(e)
         return [''],'0'
-
     return allergy, date
+
+def display(text):
+    try:
+        for i in text['images'][0]['fields']:
+            i = i['inferText']
+            print(i)
+    except:
+        print(0)
 
 def date_check(text):
     date = ['0']
@@ -105,7 +113,7 @@ def date_check(text):
             date_split = i.split('.')
             if len(date_split) == 3:
                 if len(date_split[0]) == 2 and len(date_split[1]) == 2 and len(date_split[2]) == 2:
-                    date_sum = '20' + date_split[2] + '년' + date_split[0] + '월' + date_split[1] + '일'
+                    date_sum = '20' + date_split[2] + '년' + date_split[1] + '월' + date_split[0] + '일'
                     date.append(date_sum)
                 if len(date_split[0]) == 4 and len(date_split[1]) == 2 and len(date_split[2]) == 2:
                     date_sum = date_split[0] + '년' + date_split[1] + '월' + date_split[2] + '일'
@@ -117,29 +125,48 @@ def date_check(text):
     except Exception as e:
         print(e)
         return max(date)
+
 def allergy_check(text):
     allergy = []
     try:
         for i in text['images'][0]['fields']:
             i = i['inferText']
-            if '메밀' in i: allergy.append('메밀')
-            if '대두' in i: allergy.append('대두')
-            if '호두' in i: allergy.append('호두')
-            if '땅콩' in i: allergy.append('땅콩')
-            if '복숭아' in i: allergy.append('복숭아')
-            if '토마토' in i: allergy.append('토마토')
-            if '돼지고기' in i: allergy.append('돼지고기')
-            if '계란' in i: allergy.append('계란')
-            if '우유' in i: allergy.append('우유')
-            if '닭고기' in i: allergy.append('닭고기')
-            if '쇠고기' in i: allergy.append('쇠고기')
-            if '새우' in i: allergy.append('새우')
-            if '고등어' in i: allergy.append('고등어')
-            if '홍합' in i in i: allergy.append('홍합')
-            if '전복' in i: allergy.append('전복')
-            if '조개류' in i: allergy.append('조개류')
-            if '오징어' in i: allergy.append('오징어')
-            if '아황산' in i: allergy.append('아황산')
+            if '메밀' in i:
+                allergy.append('메밀')
+            if '대두' in i:
+                allergy.append('대두')
+            if '호두' in i:
+                allergy.append('호두')
+            if '땅콩' in i:
+                allergy.append('땅콩')
+            if '복숭아' in i:
+                allergy.append('복숭아')
+            if '토마토' in i:
+                allergy.append('토마토')
+            if '돼지고기' in i:
+                allergy.append('돼지고기')
+            if '계란' in i:
+                allergy.append('계란')
+            if '우유' in i:
+                allergy.append('우유')
+            if '닭고기' in i:
+                allergy.append('닭고기')
+            if '쇠고기' in i:
+                allergy.append('쇠고기')
+            if '새우' in i:
+                allergy.append('새우')
+            if '고등어' in i:
+                allergy.append('고등어')
+            if '홍합' in i in i:
+                allergy.append('홍합')
+            if '전복' in i:
+                allergy.append('전복')
+            if '조개류' in i:
+                allergy.append('조개류')
+            if '오징어' in i:
+                allergy.append('오징어')
+            if '아황산' in i:
+                allergy.append('아황산')
             if '게' in i:
                 if len(i) <= 1:
                     allergy.append('게')
@@ -180,16 +207,55 @@ def food_save(food_n, a, d):
         return
     return
 
+def food_save(food_n, a, d):
+    try:
+        if food_n != 'no_data' and len(food_n) != 0:
+            global f_n
+            f_n = food_n
+        if len(a) > 0:
+            global allergy
+            for i in a:
+                if i not in allergy:
+                    allergy.append(i)
+        if len(d) > 0:
+            global date
+            date = max(date, d)
+    except Exception as e:
+        print(e)
+        return
+    return
+
 def send_food_data():
     global f_n
     global allergy
     global date
-    data = {
-        'name': f_n,
-        'allergy': allergy,
-        'date': date
-    }
-    f_n = ''
-    allergy = []
-    date = ''
-    return json.dumps(data, default=str, indent=2, ensure_ascii=False)
+    if len(f_n) != 0 and len(date) != 0:
+        f_id = save_food_json()
+        data = {
+            'id':f_id,
+            'name': f_n,
+            'allergy': allergy,
+            'date': date
+        }
+        f_n = ''
+        allergy = []
+        date = ''
+        return json.dumps(data, default=str, indent=2, ensure_ascii=False)
+    else:
+        return {}                                                                                                                                                                    
+
+def save_food_json():
+    global f_n
+    global allergy
+    global date
+    data = app.food_file_load()
+    food_id = 0
+    while any(user['id'] == food_id for user in data):
+        food_id += 1
+    t = time.localtime(time.time())
+    save_time = str(t.tm_year) + '년 ' + str(t.tm_mon) + '월 ' + str(t.tm_mday) + '일 ' + str(t.tm_hour) + '시 ' + str(t.tm_min) + '분 ' + str(t.tm_sec) + '초'
+    user_data = {'id': food_id, 'name': f_n, 'allergy': allergy, 'date': date, 'time':save_time}
+    data.append(user_data)
+    with open('product.json', 'w') as file:
+        json.dump(data, file, indent=2, ensure_ascii=False)
+    return food_id
