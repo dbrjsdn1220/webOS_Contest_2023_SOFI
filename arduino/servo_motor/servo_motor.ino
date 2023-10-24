@@ -6,6 +6,10 @@ void setup() {
   digitalWrite(13, LOW);
   pinMode(12, OUTPUT);
   digitalWrite(12, HIGH);
+   pinMode(11, OUTPUT);
+  digitalWrite(13, LOW);
+   pinMode(3, OUTPUT);
+  digitalWrite(3, LOW);
   //회로 연결 상태에 따라 LOW가 전진일지 HIGH가 전진인지 정해준다
   pinMode(7, INPUT);//라즈베리로 부터 받는 gpio
   digitalWrite(7, LOW);
