@@ -1,6 +1,5 @@
 package com.sofi.sofi_app;
 
-import android.app.DownloadManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -13,7 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.io.StringReader;
+import java.util.Calendar;
 
 
 public class TodayActivity extends AppCompatActivity {
@@ -38,8 +37,9 @@ public class TodayActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
-                TodayText.setText(UnicodeToUTF_8(response));
+                String unitext = Today_UnicodeToUTF_8(response);
+                String text = Today_StringToJson(unitext);
+                TodayText.setText(text);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -49,7 +49,7 @@ public class TodayActivity extends AppCompatActivity {
         });
         queue.add(stringRequest);
     }
-    public String UnicodeToUTF_8(String uni){
+    public String Today_UnicodeToUTF_8(String uni){
         StringBuffer result = new StringBuffer();
 
         for(int i=0; i<uni.length(); i++){
@@ -62,5 +62,50 @@ public class TodayActivity extends AppCompatActivity {
             }
         }
         return result.toString();
+    }
+
+    public  String Today_StringToJson(String uni) {
+        Calendar nowtime = Calendar.getInstance();
+        String textserch, allergy, name, date, time, timecheck, nowdate = "", textall = "";
+        String unitext = uni.substring(1,uni.length()-2);
+        String text = unitext.replace("\n", "");
+
+        nowtime.clear();
+        nowtime = Calendar.getInstance();
+
+        nowdate = nowdate + nowtime.get(Calendar.YEAR);
+        nowdate = nowdate + (nowtime.get(Calendar.MONTH) + 1);
+        nowdate = nowdate + nowtime.get(Calendar.DATE);
+        while(true) {
+            try {
+                if (!text.contains("{") || !text.contains("}"))
+                    break;
+
+                textserch = text.substring(text.indexOf("{") + 1, text.indexOf("}") - 1);
+                time = textserch.substring(textserch.indexOf("time")+8, textserch.length()-2);
+                timecheck = time.replace("년 ","");
+                timecheck = timecheck.replace("월 ", "");
+                timecheck = timecheck.substring(0,timecheck.indexOf("일 "));
+
+                text = text.substring(text.indexOf("}") + 1);
+                allergy = textserch.substring(textserch.indexOf("[") + 1, textserch.indexOf("]"));
+                allergy = allergy.replace("\"", "");
+                allergy = allergy.replace(" ", "");
+                allergy = allergy.replace(",", ", ");
+
+                name = textserch.substring(textserch.indexOf("name") + 8, textserch.indexOf("time") - 7);
+
+                date = textserch.substring(textserch.indexOf("date") + 8, textserch.indexOf("id") - 7);
+
+                if (timecheck.equals(nowdate)) {
+                    textall = "[" + time + "]\n제품명: " + name + "\n유통기한: " + date + "\n알러지: " + allergy + "\n\n" + textall;
+                }
+            }
+            catch (IndexOutOfBoundsException e) {
+                break;
+            }
+        }
+        textall = nowdate + textall;
+        return textall;
     }
 }
