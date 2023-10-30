@@ -1,13 +1,24 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".AllActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TodayActivity">
+    android:gravity="center"
+    android:orientation="vertical">
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:text="오늘 스캔 테스트"
-        android:textSize="20dp"
-        android:id="@+id/UserText"/>
-</ScrollView>
+        android:layout_height="wrap_content"
+        android:text="스캔한 제품(전체)"
+        android:textSize="30dp"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:text="오늘 스캔 테스트"
+            android:textSize="20dp"
+            android:id="@+id/AllText"/>
+    </ScrollView>
+</LinearLayout>

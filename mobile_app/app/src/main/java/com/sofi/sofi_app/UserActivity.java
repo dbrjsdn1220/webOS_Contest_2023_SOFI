@@ -14,7 +14,7 @@ import com.android.volley.toolbox.Volley;
 
 public class UserActivity extends AppCompatActivity {
     RequestQueue queue;
-    TextView AllText;
+    TextView UserText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +23,7 @@ public class UserActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        AllText = (TextView) findViewById(R.id.AllText);
+        UserText = (TextView) findViewById(R.id.UserText);
 
         if(queue == null) {
             queue = Volley.newRequestQueue(this);
@@ -34,18 +34,19 @@ public class UserActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
-                AllText.setText(UnicodeToUTF_8(response));
+                String u_text = User_UnicodeToUTF_8(response);
+                String text = User_StringToJson(u_text);
+                UserText.setText(text);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                AllText.setText("에러: " + error.toString());
+                UserText.setText("에러: " + error.toString());
             }
         });
         queue.add(stringRequest);
     }
-    public String UnicodeToUTF_8(String uni){
+    public String User_UnicodeToUTF_8(String uni){
         StringBuffer result = new StringBuffer();
 
         for(int i=0; i<uni.length(); i++){
@@ -58,5 +59,30 @@ public class UserActivity extends AppCompatActivity {
             }
         }
         return result.toString();
+    }
+
+    public  String User_StringToJson(String uni) {
+        String textserch, allergy, name, id, textall = "";
+        String unitext = uni.substring(1,uni.length()-2);
+        String text = unitext.replace("\n", "");
+        while(true) {
+            try {
+                if (!text.contains("{") || !text.contains("}"))
+                    break;
+                textserch = text.substring(text.indexOf("{") + 1, text.indexOf("}") - 1);
+                text = text.substring(text.indexOf("}") + 1);
+                id = textserch.substring(textserch.indexOf("id")+4, textserch.indexOf("name")-6);
+
+                name = textserch.substring(textserch.indexOf("name")+8, textserch.length()-2);
+
+                allergy = textserch.substring(16, textserch.indexOf("id")-7);
+                textall = "ID: " + id + "\n이름: " + name + "\n알러지: " + allergy + "\n\n" + textall;
+            }
+            catch (IndexOutOfBoundsException e) {
+                System.out.println("123123");
+                break;
+            }
+        }
+        return textall;
     }
 }

@@ -26,7 +26,7 @@ async function gpio_mains(){
   await delay(100);
   console.log("종료 끝~!");
 }
-
+ 
 
 async function gpio_test()
 {

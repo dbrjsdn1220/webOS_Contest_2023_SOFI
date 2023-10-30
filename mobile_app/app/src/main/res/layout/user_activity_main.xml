@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        android:text="오늘 스캔 테스트"
+        android:text="유저 테스트"
         android:textSize="20dp"
-        android:id="@+id/AllText"/>
+        android:id="@+id/UserText"/>
 </ScrollView>

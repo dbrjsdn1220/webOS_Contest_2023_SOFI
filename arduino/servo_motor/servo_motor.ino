@@ -15,7 +15,7 @@ void setup() {
   digitalWrite(7, LOW);
   pinMode(6, OUTPUT);//돌아간 후 라즈베리에 입력
   digitalWrite(6, LOW);
-}
+} 
 
 void loop() {
   
