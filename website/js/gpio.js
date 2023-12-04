@@ -10,16 +10,14 @@ async function gpio_mains() {
   await delay(50);
   await gpio_test();
   console.log("돌기완료");
-  await delay(100);
   await start_cam();
   console.log("사진완료");
-  await delay(70);
+  await delay(50);
   await gpio_test();
   console.log("돌기완료");
-  await delay(120);
   await start_cam();
   console.log("사진완료");
-  await delay(100);
+  await delay(50);
   console.log("종료 끝~!");
 }
 
