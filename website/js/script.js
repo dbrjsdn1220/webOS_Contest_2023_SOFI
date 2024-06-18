@@ -1,3 +1,4 @@
+server_ip = "http://115.85.182.143:5501"
 var bridge = new WebOSServiceBridge();
 const popupConfirm = document.getElementById("confirm");
 const popupScanning = document.getElementById("scanning");
@@ -95,7 +96,7 @@ function dataLoad() {
   let num = document.getElementById("num");
   num.textContent = `${number + 1} Page`;
 
-  fetch("http://115.85.182.143:5501/getFood")
+  fetch(server_ip + "/getFood")
     .then((response) => response.json())
     .then((data) => {
       dataLength = Object.keys(data).length;
@@ -138,7 +139,7 @@ function prevPage() {
 //상세 정보 보기
 function specificData(num) {
   popupSpecific.style.display = "flex";
-  fetch("http://115.85.182.143:5501/getFood")
+  fetch(server_ip + "/getFood")
     .then((response) => response.json())
     .then((data) => {
       dataDetail.innerHTML = `<br>
@@ -202,7 +203,7 @@ function uploadPic() {
     .replace(/^data:image\/jpeg;base64,/, "");
   console.log(imageData);
 
-  fetch("http://115.85.182.143:5501/ImgSend", {
+  fetch(server_ip + "/ImgSend", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -219,7 +220,7 @@ function uploadPic() {
 //AI 사진 처리 후 저장된 데이터 받기
 function getImageData() {
   foodData = "";
-  fetch("http://115.85.182.143:5501/ImgReceive")
+  fetch(server_ip + "/ImgReceive")
     .then((response) => response.json())
     .then((data) => {
       foodData = data;
@@ -235,7 +236,7 @@ function getImageData() {
 
 // 스캔한 음식의 알레르기 식품과 사용자의 알레르기를 비교하기 위해 서버에서 사용자 알레르기 정보 호출
 function compareAllergy() {
-  fetch("http://115.85.182.143:5501/getUser")
+  fetch(server_ip + "/getUser")
     .then((response) => response.json())
     .then((data) => {
       data.forEach((user) => {

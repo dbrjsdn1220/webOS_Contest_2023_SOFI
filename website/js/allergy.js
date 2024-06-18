@@ -1,33 +1,35 @@
-//ë°ì´í„°ë¥¼ ì„œë²„ë¡œë¶€í„° ë°›ì•„ì™€ í™”ë©´ì— ì¶œë ¥
+//?°?´?„°ë¥? ?„œë²„ë¡œë¶??„° ë°›ì•„??? ?™”ë©´ì— ì¶œë ¥
+server_ip = "http://115.85.182.143:5501"
+
 function fetchData() {
-  fetch("http://115.85.182.143:5501/getUser")
+  fetch(server_ip + "/getUser")
     .then((response) => response.json())
     .then((data) => {
       const dataList = document.getElementById("dataList");
-      dataList.innerHTML = ""; // ê¸°ì¡´ ëª©ë¡ ì´ˆê¸°í™”
+      dataList.innerHTML = ""; // ê¸°ì¡´ ëª©ë¡ ì´ˆê¸°?™”
       data.forEach((user) => {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
-        ì´ë¦„: ${user.name} &#160/&#160 ì•Œë ˆë¥´ê¸°: ${user.allergy} &#160&#160
-        <button onclick="deleteUser(${user.id})">ì‚­ì œ</button>`;
-        dataList.appendChild(listItem); //ë³€ìˆ˜ ê°ê°ì˜ ê°’ì„ dataListì— ì¶”ê°€
+        ?´ë¦?: ${user.name} &#160/&#160 ?•Œ? ˆë¥´ê¸°: ${user.allergy} &#160&#160
+        <button onclick="deleteUser(${user.id})">?‚­? œ</button>`;
+        dataList.appendChild(listItem); //ë³??ˆ˜ ê°ê°?˜ ê°’ì„ dataList?— ì¶”ê??
       });
     })
     .catch((error) => {
-      console.error("ì˜¤ë¥˜ ë°œìƒ:", error);
+      console.error("?˜¤ë¥? ë°œìƒ:", error);
     });
 }
 
-//ì„œë²„ user.jsonì— ì…ë ¥í•œ ê°’ì„ ì €ì¥í•˜ëŠ” ê¸°ëŠ¥
+//?„œë²? user.json?— ?…? ¥?•œ ê°’ì„ ????¥?•˜?Š” ê¸°ëŠ¥
 function save() {
   const name = document.getElementById("name").value;
   const allergy = document.getElementById("allergy").value;
   const user = { name, allergy };
 
-  fetch("http://115.85.182.143:5501/saveUser", {
+  fetch(server_ip + "/saveUser", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json", //json í˜•íƒœì˜ íŒŒì¼ì„ ë‹¤ë£¸.
+      "Content-Type": "application/json", //json ?˜•?ƒœ?˜ ?ŒŒ?¼?„ ?‹¤ë£?.
     },
     body: JSON.stringify(user),
   })
@@ -37,9 +39,9 @@ function save() {
     });
 }
 
-//ë°ì´í„°ë¥¼ ì‚­ì œí•˜ëŠ” ê¸°ëŠ¥
+//?°?´?„°ë¥? ?‚­? œ?•˜?Š” ê¸°ëŠ¥
 function deleteUser(id) {
-  fetch(`http://115.85.182.143:5501/deleteUser`, {
+  fetch(server_ip + "/deleteUser", {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -49,9 +51,9 @@ function deleteUser(id) {
     .then((response) => response.text())
     .then((message) => {
       console.log(message);
-      fetchData(); // ë°ì´í„° ì‚­ì œ í›„ ë°ì´í„° ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¤ê¸°
+      fetchData(); // ?°?´?„° ?‚­? œ ?›„ ?°?´?„° ?‹¤?‹œ ë¶ˆëŸ¬?˜¤ê¸?
     })
     .catch((error) => {
-      console.error("ì˜¤ë¥˜ ë°œìƒ:", error);
+      console.error("?˜¤ë¥? ë°œìƒ:", error);
     });
 }

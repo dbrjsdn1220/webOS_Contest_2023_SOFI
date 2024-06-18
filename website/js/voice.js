@@ -1,3 +1,4 @@
+server_ip = "http://115.85.182.143:5501"
 var BridgeVoice = new WebOSServiceBridge();
 var url, params, sentence, temp;
 
@@ -72,7 +73,7 @@ async function uploadPic_voice() {
     .toDataURL("image/jpeg")
     .replace(/^data:image\/jpeg;base64,/, "");
 
-  fetch("http://115.85.182.143:5501/ImgSend", {
+  fetch(server_ip + "/ImgSend", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -169,7 +170,7 @@ async function selectAction() {
       //등록 가능한 알레르기 식품인지 확인
       for (let i in allergies) {
         if (Array[3] == allergies[i]) {
-          fetch("http://101.101.219.171:5556/saveUser", {
+          fetch(server_ip + "/saveUser", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -189,7 +190,7 @@ async function selectAction() {
         }
       }
     } else if (Array[1] == "정보") {
-      fetch("http://101.101.219.171:5556/getUser")
+      fetch(server_ip + "/getUser")
         .then((response) => response.json())
         .then((data) => {
           data.forEach((user) => {
@@ -200,7 +201,7 @@ async function selectAction() {
         });
     } else if (Array[1] == "삭제") {
       const id = Array[2].substring(0, 1);
-      fetch(`http://101.101.219.171:5556/deleteUser`, {
+      fetch(server_ip + "/deleteUser", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
