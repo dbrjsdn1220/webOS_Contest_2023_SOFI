@@ -19,8 +19,12 @@ async function gpio_test() {
   var params = {
     pin: "gpio20",
     direction: "in",
-  };
-  await delay(20000);
+    };
+
+    await console.log("딜레이 시작");
+    await delay(100);
+    await console.log("딜레이 끝");
+
   await BridgeGpio.call(url2, JSON.stringify(params));
   await console.log("체크 됨");
   var url = "luna://com.webos.service.peripheralmanager/gpio/open";
@@ -40,7 +44,6 @@ async function gpio_test() {
     direction: "outLow",
   };
   await BridgeGpio.call(url, JSON.stringify(params));
-  await delay(50);
   /*
   handle="low";
   while(handle=="low")
@@ -56,6 +59,7 @@ async function gpio_test() {
   } 
   handle="low";
   */
+  await delay(50);
 }
 
 function getHandle(msg) {

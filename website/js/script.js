@@ -102,10 +102,10 @@ function dataLoad() {
       dataLength = Object.keys(data).length;
       const scanList = document.getElementById("scanList");
       scanList.innerHTML = ""; // 기존 목록 초기화
-      for (
-        let i = dataLength - number * 10;
-        i != dataLength - number * 10 - 10;
-        i--
+        for (
+            let i = dataLength - number * 10;
+            i != dataLength - number * 10 - 10;
+            i--
       ) {
         if (i > 0) {
           const listItem = document.createElement("li");
