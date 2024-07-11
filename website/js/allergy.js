@@ -1,26 +1,26 @@
 server_ip = "http://203.253.176.254:10500"
 
-//µ¥ÀÌÅÍ¸¦ ¼­¹ö·ÎºÎÅÍ ¹Ş¾Æ¿Í È­¸é¿¡ Ãâ·Â
+//ë°ì´í„°ë¥¼ ì„œë²„ë¡œë¶€í„° ë°›ì•„ì™€ í™”ë©´ì— ì¶œë ¥
 function fetchData() {
   fetch(server_ip + "/getUser")
     .then((response) => response.json())
     .then((data) => {
       const dataList = document.getElementById("dataList");
-      dataList.innerHTML = ""; // ±âÁ¸ ¸ñ·Ï ÃÊ±âÈ­
+      dataList.innerHTML = ""; // ê¸°ì¡´ ëª©ë¡ ì´ˆê¸°í™”
       data.forEach((user) => {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
-        ÀÌ¸§: ${user.name} &#160/&#160 ¾Ë·¹¸£±â: ${user.allergy} &#160&#160
-        <button onclick="deleteUser(${user.id})">»èÁ¦</button>`;
-        dataList.appendChild(listItem); //º¯¼ö °¢°¢ÀÇ °ªÀ» dataList¿¡ Ãß°¡
+        ì´ë¦„: ${user.name} &#160/&#160 ì•Œë ˆë¥´ê¸°: ${user.allergy} &#160&#160
+        <button onclick="deleteUser(${user.id})">ì‚­ì œ</button>`;
+        dataList.appendChild(listItem); //ë³€ìˆ˜ ê°ê°ì˜ ê°’ì„ dataListì— ì¶”ê°€
       });
     })
     .catch((error) => {
-        console.error("¿À·ù ¹ß»ı:", error);
+        console.error("ì˜¤ë¥˜ ë°œìƒ:", error);
     });
 }
 
-//¼­¹ö user.json¿¡ ÀÔ·ÂÇÑ °ªÀ» ÀúÀåÇÏ´Â ±â´É
+//ì„œë²„ user.jsonì— ì…ë ¥í•œ ê°’ì„ ì €ì¥í•˜ëŠ” ê¸°ëŠ¥
 function save() {
   const name = document.getElementById("name").value;
   const allergy = document.getElementById("allergy").value;
@@ -29,7 +29,7 @@ function save() {
   fetch(server_ip + "/saveUser", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json", //json ÇüÅÂÀÇ ÆÄÀÏÀ» ´Ù·ë
+      "Content-Type": "application/json", //json í˜•íƒœì˜ íŒŒì¼ì„ ë‹¤ë£¸
     },
     body: JSON.stringify(user),
   })
@@ -39,7 +39,7 @@ function save() {
     });
 }
 
-//µ¥ÀÌÅÍ¸¦ »èÁ¦ÇÏ´Â ±â´É
+//ë°ì´í„°ë¥¼ ì‚­ì œí•˜ëŠ” ê¸°ëŠ¥
 function deleteUser(id) {
   fetch(server_ip + "/deleteUser", {
     method: "DELETE",
@@ -51,9 +51,9 @@ function deleteUser(id) {
     .then((response) => response.text())
     .then((message) => {
       console.log(message);
-      fetchData(); // µ¥ÀÌÅÍ »èÁ¦ ÈÄ µ¥ÀÌÅÍ ´Ù½Ã ºÒ·¯¿À±â
+      fetchData(); // ë°ì´í„° ì‚­ì œ í›„ ë°ì´í„° ë‹¤ì‹œ ë¶ˆëŸ¬ì˜¤ê¸°
     })
     .catch((error) => {
-        console.error("¿À·ù ¹ß»ı:", error);
+        console.error("ì˜¤ë¥˜ ë°œìƒ:", error);
     });
 }
