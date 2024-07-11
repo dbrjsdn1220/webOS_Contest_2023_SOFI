@@ -20,6 +20,7 @@ async function gpio_test() {
     pin: "gpio20",
     direction: "in",
   };
+  await delay(20000);
   await BridgeGpio.call(url2, JSON.stringify(params));
   await console.log("체크 됨");
   var url = "luna://com.webos.service.peripheralmanager/gpio/open";
@@ -31,7 +32,7 @@ async function gpio_test() {
   var params = {
     pin: "gpio21",
     direction: "outHigh",
-  };
+  }; 
   await BridgeGpio.call(url, JSON.stringify(params));
   var url = "luna://com.webos.service.peripheralmanager/gpio/setDirection";
   var params = {
@@ -108,7 +109,6 @@ async function start_cam() {
   Bridgecam.call(url4, JSON.stringify(params));
   await delay(15);
   console.log("완료");
-    await delay(20000);
 }
 
 /*
