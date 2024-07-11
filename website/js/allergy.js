@@ -1,5 +1,5 @@
 //?°?´?„°ë¥? ?„œë²„ë¡œë¶??„° ë°›ì•„??? ?™”ë©´ì— ì¶œë ¥
-server_ip = "http://115.85.182.143:5501"
+server_ip = "http://203.253.176.254:10500"
 
 function fetchData() {
   fetch(server_ip + "/getUser")

@@ -1,4 +1,4 @@
-server_ip = "http://115.85.182.143:5501"
+server_ip = "http://203.253.176.254:10500"
 var bridge = new WebOSServiceBridge();
 const popupConfirm = document.getElementById("confirm");
 const popupScanning = document.getElementById("scanning");
