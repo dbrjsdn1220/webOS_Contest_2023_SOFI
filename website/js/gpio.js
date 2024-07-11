@@ -108,6 +108,7 @@ async function start_cam() {
   Bridgecam.call(url4, JSON.stringify(params));
   await delay(15);
   console.log("완료");
+    await delay(20000);
 }
 
 /*
