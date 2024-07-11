@@ -9,6 +9,7 @@ var foodData;
 var dataLength = 0;
 var number = 0;
 
+/*
 navigator.mediaDevices
   .getUserMedia({ video: true })
   .then(function (stream) {
@@ -18,6 +19,7 @@ navigator.mediaDevices
   .catch(function (err) {
     console.error("Error accessing webcam: ", err);
   });
+*/
 
 //지연
 function sleep(n) {
@@ -223,10 +225,11 @@ function getImageData() {
   fetch(server_ip + "/ImgReceive")
     .then((response) => response.json())
     .then((data) => {
-      foodData = data;
-      console.log(foodData);
-      ttsSpeak(
-        `"식품명은" ${foodData.name}, 유통기한은 ${foodData.date}까지 입니다.`
+      foodData = JSON.parse(data);
+        console.log(foodData);
+        console.log(foodData.name);
+        ttsSpeak(
+            `"식품명은" ${foodData.name}, 유통기한은 ${foodData.date}까지 입니다.`
       );
     })
     .catch((error) => {
@@ -236,11 +239,12 @@ function getImageData() {
 
 // 스캔한 음식의 알레르기 식품과 사용자의 알레르기를 비교하기 위해 서버에서 사용자 알레르기 정보 호출
 function compareAllergy() {
-  fetch(server_ip + "/getUser")
+  fetch(server_ip + "/getUser") 
     .then((response) => response.json())
     .then((data) => {
-      data.forEach((user) => {
-        foodData.allergy.forEach((allergy) => {
+        data.forEach((user) => {
+            foodData.allergy.forEach((allergy) => {
+                console.log(user);
           if (user.allergy == allergy) {
             ttsSpeak(`해당 식품 ${foodData.name}에 ${user.name}님의 알레르기 유발식품인 
                     ${allergy}, 함유되어 있습니다. 섭취에 주의 바랍니다.`);

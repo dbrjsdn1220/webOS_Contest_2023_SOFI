@@ -8,27 +8,29 @@
 
 <body style="background-color: white;">
     <!--카메라 사용하기 위한 태그 추가-->
+    <!--
     <header>
         <video id="video" width="720" height="640" style="display: none" autoplay></video>
         <canvas id="canvas" width="720" height="640" style="display: none"></canvas>
     </header>
-
+    -->
+    
     <!--좌측에 메뉴선택하는 부분-->
     <section id="menuBar">
         <img src="img/sofi.png" id="logo">
         <nav>
-        <li class="menuType">HOME</li>
-        <li class="menuLink" id="menu1" onclick="iframeSelect(1)">대시보드</li>
-        <li class="menuType">SETTING</li>
-        <li class="menuLink" id="menu2" onclick="iframeSelect(2)">알레르기</li>
-        <li class="menuType">INFORMATION</li>
-        <li class="menuLink" id="menu3" onclick="iframeSelect(3)">요리법</li>
-        <li class="menuLink" id="menu4" onclick="iframeSelect(4)">사용법</li>
+            <li class="menuType">HOME</li>
+            <li class="menuLink" id="menu1" onclick="iframeSelect(1)">대시보드</li>
+            <li class="menuType">SETTING</li>
+            <li class="menuLink" id="menu2" onclick="iframeSelect(2)">알레르기</li>
+            <li class="menuType">INFORMATION</li>
+            <li class="menuLink" id="menu3" onclick="iframeSelect(3)">요리법</li>
+            <li class="menuLink" id="menu4" onclick="iframeSelect(4)">사용법</li>
         </nav>
         <img id="volumeImage" src="img/mute.png" onclick="volumeControl()"> <!--onclick="volumeControl()"-->
         <img id="cameraImage" src="img/camera.png" onclick="showConfirm()"> <!--onclick="showConfirm()"-->
     </section>
-      <!--confirmScan()-->
+    <!--confirmScan()-->
     <!--iframe 부분-->
     <iframe id="iframe"></iframe>
 
@@ -48,11 +50,11 @@
     </div>
 
     <script>
-        window.onload = function() {
-        iframeSelect(1); //초기 페이지 접속
-        voiceStart(); //음성인식 실행
-        voiceGetResponse(); //음성인식 값 확인
-        volumeControl(); //볼륨 100시작
+        window.onload = function () {
+            iframeSelect(1); //초기 페이지 접속
+            voiceStart(); //음성인식 실행
+            voiceGetResponse(); //음성인식 값 확인
+            volumeControl(); //볼륨 100시작
         };
     </script>
     <script src="js/gpio.js"></script>
