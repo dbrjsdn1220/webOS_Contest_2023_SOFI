@@ -5,7 +5,7 @@ var url, params, handle, url2, url3, url4;
 var num;
 
 async function gpio_mains() {
-  await start_cam();
+  await gpio_test();
   console.log("실행완료");
 }
 
