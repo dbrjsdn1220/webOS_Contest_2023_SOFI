@@ -1,26 +1,26 @@
-//?뜲?씠?꽣瑜? ?꽌踰꾨줈遺??꽣 諛쏆븘??? ?솕硫댁뿉 異쒕젰
 server_ip = "http://203.253.176.254:10500"
 
+//데이터를 서버로부터 받아와 화면에 출력
 function fetchData() {
   fetch(server_ip + "/getUser")
     .then((response) => response.json())
     .then((data) => {
       const dataList = document.getElementById("dataList");
-      dataList.innerHTML = ""; // 湲곗〈 紐⑸줉 珥덇린?솕
+      dataList.innerHTML = ""; // 기존 목록 초기화
       data.forEach((user) => {
         const listItem = document.createElement("li");
         listItem.innerHTML = `
-        ?씠由?: ${user.name} &#160/&#160 ?븣?젅瑜닿린: ${user.allergy} &#160&#160
-        <button onclick="deleteUser(${user.id})">?궘?젣</button>`;
-        dataList.appendChild(listItem); //蹂??닔 媛곴컖?쓽 媛믪쓣 dataList?뿉 異붽??
+        이름: ${user.name} &#160/&#160 알레르기: ${user.allergy} &#160&#160
+        <button onclick="deleteUser(${user.id})">삭제</button>`;
+        dataList.appendChild(listItem); //변수 각각의 값을 dataList에 추가
       });
     })
     .catch((error) => {
-      console.error("?삤瑜? 諛쒖깮:", error);
+        console.error("오류 발생:", error);
     });
 }
 
-//?꽌踰? user.json?뿉 ?엯?젰?븳 媛믪쓣 ????옣?븯?뒗 湲곕뒫
+//서버 user.json에 입력한 값을 저장하는 기능
 function save() {
   const name = document.getElementById("name").value;
   const allergy = document.getElementById("allergy").value;
@@ -29,7 +29,7 @@ function save() {
   fetch(server_ip + "/saveUser", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json", //json ?삎?깭?쓽 ?뙆?씪?쓣 ?떎猷?.
+      "Content-Type": "application/json", //json 형태의 파일을 다룸
     },
     body: JSON.stringify(user),
   })
@@ -39,7 +39,7 @@ function save() {
     });
 }
 
-//?뜲?씠?꽣瑜? ?궘?젣?븯?뒗 湲곕뒫
+//데이터를 삭제하는 기능
 function deleteUser(id) {
   fetch(server_ip + "/deleteUser", {
     method: "DELETE",
@@ -51,9 +51,9 @@ function deleteUser(id) {
     .then((response) => response.text())
     .then((message) => {
       console.log(message);
-      fetchData(); // ?뜲?씠?꽣 ?궘?젣 ?썑 ?뜲?씠?꽣 ?떎?떆 遺덈윭?삤湲?
+      fetchData(); // 데이터 삭제 후 데이터 다시 불러오기
     })
     .catch((error) => {
-      console.error("?삤瑜? 諛쒖깮:", error);
+        console.error("오류 발생:", error);
     });
 }
