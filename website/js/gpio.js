@@ -6,19 +6,7 @@ var num;
 
 async function gpio_mains() {
   await start_cam();
-  console.log("사진 완료");
-  await delay(50);
-  await gpio_test();
-  console.log("돌기완료");
-  await start_cam();
-  console.log("사진완료");
-  await delay(50);
-  await gpio_test();
-  console.log("돌기완료");
-  await start_cam();
-  console.log("사진완료");
-  await delay(50);
-  console.log("종료 끝~!");
+  console.log("실행완료");
 }
 
 async function gpio_test() {
